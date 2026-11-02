@@ -15,28 +15,21 @@ price_monthly_min: null
 price_monthly_max: null
 traffic_gb: null
 rating: null
-status: "正常"
-evidence: "待复测"
+status: "异常"
+evidence: "公开信息整理"
+verified_at: 2026-11-02
 affiliate_relationship: "本站链接为推广链接，可能获得返佣"
 pros: []
 cons: []
-summary: "隐云。数据待复测，请以官网为准。"
+summary: "隐云近期有异常反馈，建议只买月付、谨慎长约。"
 featured: false
 weight: 0
 ---
 
 ## 隐云
 
-> ⚠️ 本页数据尚未独立核实（证据等级：待复测）。价格、流量、线路、解锁能力等以机场官网为准，请勿仅凭本页信息直接年付。
-
-### 简介
-
-_待补充。_
-
-### 套餐与价格
-
-_待复测。_
+> ⚠️ 隐云 近期收到异常反馈（clash-jichang: 极高跑路风险预警，与奈云共用平台）。节点可能仍可用，但建议只买月付、避免长约。
 
 ### 优缺点
 
-_待复测。_
+_待补充实测。_

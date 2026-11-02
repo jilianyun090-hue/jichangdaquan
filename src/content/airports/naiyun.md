@@ -15,28 +15,21 @@ price_monthly_min: null
 price_monthly_max: null
 traffic_gb: null
 rating: null
-status: "正常"
-evidence: "待复测"
+status: "跑路"
+evidence: "公开信息整理"
+verified_at: 2026-11-02
 affiliate_relationship: "本站链接为推广链接，可能获得返佣"
 pros: []
 cons: []
-summary: "奈云。数据待复测，请以官网为准。"
+summary: "奈云已被标记为跑路，请勿充值。"
 featured: false
 weight: 0
 ---
 
 ## 奈云
 
-> ⚠️ 本页数据尚未独立核实（证据等级：待复测）。价格、流量、线路、解锁能力等以机场官网为准，请勿仅凭本页信息直接年付。
-
-### 简介
-
-_待补充。_
-
-### 套餐与价格
-
-_待复测。_
+> ⛔ 奈云 已被标记为「跑路」，请勿充值，谨防损失。信息来源：clash-jichang: 2026年6月倒闭跑路。
 
 ### 优缺点
 
-_待复测。_
+_待补充实测。_
