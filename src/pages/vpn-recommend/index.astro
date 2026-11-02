@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AirportCard from '../../components/AirportCard.astro';
+
+const year = new Date().getFullYear();
+const all = await getCollection('airports');
+
+// 推荐精选：正常运营 + 有价格 + 有解锁能力，价格升序取前 12
+const picks = all
+  .filter((a) => a.data.status === '正常' && a.data.price_monthly_min != null && a.data.streaming.length > 0)
+  .sort((a, b) => (a.data.price_monthly_min ?? 0) - (b.data.price_monthly_min ?? 0))
+  .slice(0, 12);
+
+const faqs = [
+  {
+    q: '梯子、翻墙 VPN、机场是一回事吗？',
+    a: '日常语境下「梯子」「翻墙 VPN」多指同一件事：帮你访问境外网站的工具。本站推荐的是「机场」——基于 Clash 等客户端的订阅式代理服务，比传统 VPN 节点多、更灵活、流媒体解锁更好。',
+  },
+  {
+    q: '梯子/VPN 推荐怎么选？',
+    a: '看三点：用途（看视频选流媒体解锁好的，用 ChatGPT 选 AI 友好的）、稳定性（IEPL/IPLC 专线晚高峰更稳）、价格（先月付试用）。下方按价格排序，可直接对比。',
+  },
+  {
+    q: '有免费梯子 / 免费 VPN 吗？',
+    a: '不推荐。免费梯子通常限速、不稳定、有隐私和安全风险，还容易跑路。本站收录的低价机场最低每月几元，稳定性和解锁能力远胜免费工具。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${year} 梯子 / 翻墙 VPN 推荐`,
+    numberOfItems: picks.length,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<Base
+  title={`梯子推荐 / 翻墙VPN推荐 ${year} · 机场节点选购`}
+  description={`${year} 梯子推荐与翻墙 VPN 推荐：精选稳定、便宜、支持 Netflix/ChatGPT 的机场节点，按价格对比，含选购指南与常见问题。数据为公开信息整理，以官网为准。`}
+  keywords={['梯子推荐', '翻墙VPN', 'VPN推荐', '梯子工具', '机场梯子', '好用的梯子', '梯子VPN', '科学上网']}
+  jsonLd={jsonLd}
+  path="/vpn-recommend/"
+>
+  <h1 class="text-2xl font-bold">梯子推荐 / 翻墙 VPN 推荐（{year}）</h1>
+  <p class="mt-2 max-w-3xl text-gray-500">
+    精选稳定、便宜、解锁能力好的机场节点（梯子 / 翻墙 VPN）。下方按最低月付价排序，支持 Netflix、
+    ChatGPT 等场景。数据为公开信息整理，非独立实测，<strong>以官网为准，建议先月付试用</strong>。
+  </p>
+
+  <h2 class="mt-8 mb-4 text-xl font-bold">精选推荐（按价格）</h2>
+  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    {picks.map((a) => <AirportCard airport={a} />)}
+  </div>
+
+  <div class="mt-6 flex flex-wrap gap-3 text-sm">
+    <a href="/ranking/" class="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700">查看完整机场排名 →</a>
+    <a href="/airports/" class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50">全部机场列表 →</a>
+  </div>
+
+  <h2 class="mt-12 mb-4 text-xl font-bold">常见问题</h2>
+  <div class="space-y-3">
+    {
+      faqs.map((f) => (
+        <details class="rounded-xl border border-gray-200 bg-white p-4">
+          <summary class="cursor-pointer font-medium text-gray-900">{f.q}</summary>
+          <p class="mt-2 text-sm text-gray-600">{f.a}</p>
+        </details>
+      ))
+    }
+  </div>
+
+  <section class="mt-12 rounded-2xl bg-white p-6 text-sm leading-relaxed text-gray-600">
+    <h2 class="mb-3 text-lg font-bold text-gray-900">关于梯子 / 翻墙 VPN 推荐</h2>
+    <p>
+      本页汇总适合科学上网的梯子与翻墙 VPN（机场）推荐。相比传统 VPN 软件，机场用 Clash、Shadowrocket
+      等客户端连接，节点更多、价格更灵活、对 Netflix、Disney+、ChatGPT 等的解锁更好。
+      不确定怎么用的，先看<a href="/guide/getting-started/quickstart/" class="text-blue-600 hover:underline">零基础订阅教程</a>
+      和<a href="/guide/clients/clash-verge-rev/" class="text-blue-600 hover:underline">Clash 使用教程</a>。
+    </p>
+  </section>
+</Base>

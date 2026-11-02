@@ -56,8 +56,9 @@ if (d.traffic_gb != null) facts.push({ label: '流量', value: `${d.traffic_gb} 
 ---
 
 <Base
-  title={`${d.name} 怎么样？评测与注册`}
-  description={`${d.name} 机场评测：价格、线路、流媒体解锁、节点与注册入口。${d.summary}`}
+  title={`${d.name}怎么样？机场测评·价格·排名`}
+  description={`${d.name}机场测评与推荐：价格${priceLabel}、线路、流媒体与 ChatGPT 解锁、节点与注册入口。${d.summary}`}
+  keywords={[`${d.name}`, `${d.name}怎么样`, `${d.name}测评`, '机场测评', '机场推荐']}
   jsonLd={jsonLd}
   path={`/airports/${airport.id}/`}
 >

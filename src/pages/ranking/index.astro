@@ -1,0 +1,174 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { STATUS_STYLE, EVIDENCE_STYLE } from '../../data/taxonomy';
+
+const year = new Date().getFullYear();
+const month = new Date().getMonth() + 1;
+
+const all = await getCollection('airports');
+
+// 有价格的进排名，按价格升序（便宜优先）；无价格的不参与主榜
+const priced = all.filter((a) => a.data.price_monthly_min != null);
+priced.sort((a, b) => (a.data.price_monthly_min ?? 0) - (b.data.price_monthly_min ?? 0));
+
+// 分榜：性价比（价格最低）、流媒体、AI/ChatGPT、运营状态风险
+const cheapest = [...priced].slice(0, 15);
+const streaming = all
+  .filter((a) => a.data.streaming.length >= 3 && a.data.status === '正常')
+  .sort((a, b) => b.data.streaming.length - a.data.streaming.length)
+  .slice(0, 12);
+const ai = all
+  .filter((a) => a.data.use_cases.includes('AI/ChatGPT') && a.data.status === '正常')
+  .sort((a, b) => (a.data.price_monthly_min ?? 999) - (b.data.price_monthly_min ?? 999))
+  .slice(0, 12);
+const risky = all.filter((a) => a.data.status === '跑路' || a.data.status === '异常' || a.data.status === '停运');
+
+const priceLabel = (a: (typeof all)[number]) =>
+  a.data.price_monthly_min != null ? `¥${a.data.price_monthly_min}/月起` : '待复测';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `${year} 机场排名`,
+  numberOfItems: priced.length,
+  itemListElement: cheapest.map((a, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: a.data.name,
+    url: `https://jichangdaquan.org/airports/${a.id}/`,
+  })),
+};
+---
+
+<Base
+  title={`机场排名 ${year} · 机场排行榜与测评`}
+  description={`${year} 年 ${month} 月机场排名与机场排行榜：收录 ${all.length} 家机场，按性价比、流媒体解锁、ChatGPT/AI、运营风险多维排序。数据为公开信息整理，以官网为准。`}
+  keywords={['机场排名', '机场排行榜', '机场测评', '机场推荐榜单', '机场月度报告']}
+  jsonLd={jsonLd}
+  path="/ranking/"
+>
+  <h1 class="text-2xl font-bold">机场排名 · 机场排行榜（{year} 年 {month} 月）</h1>
+  <p class="mt-2 max-w-3xl text-gray-500">
+    收录 {all.length} 家机场，按价格、流媒体解锁、AI/ChatGPT 支持与运营风险多维排名。
+    排名基于各参考站公开信息整理，非独立实测，机场状态变动快，<strong>购买前请以官网为准</strong>。
+  </p>
+
+  <!-- 性价比榜 -->
+  <section class="mt-8">
+    <h2 class="mb-3 text-xl font-bold">💰 性价比榜（最低月付 TOP15）</h2>
+    <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+      <table class="w-full text-sm">
+        <thead class="border-b border-gray-200 bg-gray-50 text-left text-gray-500">
+          <tr>
+            <th class="px-4 py-3">#</th>
+            <th class="px-4 py-3">机场</th>
+            <th class="px-4 py-3">最低月付</th>
+            <th class="px-4 py-3">线路</th>
+            <th class="px-4 py-3">状态</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            cheapest.map((a, i) => (
+              <tr class="border-b border-gray-100 last:border-0">
+                <td class="px-4 py-3 font-medium text-gray-400">{i + 1}</td>
+                <td class="px-4 py-3">
+                  <a href={`/airports/${a.id}/`} class="font-medium text-gray-900 hover:text-blue-600">
+                    {a.data.name}
+                  </a>
+                </td>
+                <td class="px-4 py-3 font-medium text-gray-700">{priceLabel(a)}</td>
+                <td class="px-4 py-3 text-gray-500">{a.data.lines.join('/') || '—'}</td>
+                <td class="px-4 py-3">
+                  <span class={`rounded-full px-2 py-0.5 text-xs ${STATUS_STYLE[a.data.status].cls}`}>
+                    {STATUS_STYLE[a.data.status].label}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <a href={`/airports/${a.id}/`} class="text-blue-600 hover:underline">测评</a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 流媒体榜 -->
+  <section class="mt-10">
+    <h2 class="mb-3 text-xl font-bold">🎬 流媒体解锁榜</h2>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        streaming.map((a, i) => (
+          <a href={`/airports/${a.id}/`} class="rounded-xl border border-gray-200 bg-white p-4 hover:shadow-md">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-gray-900">
+                <span class="mr-1 text-gray-400">#{i + 1}</span>
+                {a.data.name}
+              </span>
+              <span class="text-sm text-gray-500">{priceLabel(a)}</span>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">解锁：{a.data.streaming.join('、')}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- AI 榜 -->
+  <section class="mt-10">
+    <h2 class="mb-3 text-xl font-bold">🤖 ChatGPT / AI 榜</h2>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        ai.map((a, i) => (
+          <a href={`/airports/${a.id}/`} class="rounded-xl border border-gray-200 bg-white p-4 hover:shadow-md">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-gray-900">
+                <span class="mr-1 text-gray-400">#{i + 1}</span>
+                {a.data.name}
+              </span>
+              <span class="text-sm text-gray-500">{priceLabel(a)}</span>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">{a.data.lines.join('/') || '—'}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 风险观察 -->
+  {
+    risky.length > 0 && (
+      <section class="mt-10">
+        <h2 class="mb-3 text-xl font-bold">⚠️ 风险 / 跑路观察</h2>
+        <div class="rounded-xl border border-red-200 bg-red-50 p-4">
+          <ul class="space-y-2 text-sm">
+            {risky.map((a) => (
+              <li class="flex items-center gap-2">
+                <span class={`rounded-full px-2 py-0.5 text-xs ${STATUS_STYLE[a.data.status].cls}`}>
+                  {STATUS_STYLE[a.data.status].label}
+                </span>
+                <a href={`/airports/${a.id}/`} class="text-gray-700 hover:underline">
+                  {a.data.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="mt-10 rounded-2xl bg-white p-6 text-sm leading-relaxed text-gray-600">
+    <h2 class="mb-3 text-lg font-bold text-gray-900">机场排名说明</h2>
+    <p>
+      本机场排行榜综合价格、线路类型、流媒体与 ChatGPT 解锁能力、运营状态等维度，参考 GateRank、机场PK
+      等公开榜单整理而成。机场（梯子 / 翻墙 VPN）行业变动极快，排名不代表长期保证，标注「待复测」的机场
+      尚未独立核实。建议先看<a href="/guide/getting-started/choose-plan/" class="text-blue-600 hover:underline">选购指南</a>，
+      月付试用稳定后再决定。完整列表见<a href="/airports/" class="text-blue-600 hover:underline">机场列表</a>。
+    </p>
+  </section>
+</Base>

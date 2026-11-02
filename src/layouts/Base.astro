@@ -10,18 +10,37 @@ interface Props {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /** 当前页规范链接的 path，如 /airports/dageyun/ */
   path?: string;
+  /** 本页关键词，追加到站点通用关键词之后 */
+  keywords?: string[];
 }
+
+// 站点通用目标关键词
+const BASE_KEYWORDS = [
+  '机场推荐',
+  '梯子推荐',
+  '翻墙VPN',
+  '机场排名',
+  '机场测评',
+  '机场节点',
+  '机场VPN',
+  'VPN推荐',
+  '机场梯子',
+  '机场订阅',
+  'Clash 机场',
+];
 
 const {
   title,
-  description = '机场大全 —— 收录市面主流机场（VPN/代理订阅服务），按价格、用途、线路、流媒体解锁多维筛选，帮你快速选到合适的机场。',
+  description = '机场大全收录 100+ 家主流机场（VPN/代理订阅服务），提供机场推荐、机场排名、机场测评与梯子/翻墙VPN选购：按价格、用途、线路、流媒体解锁多维筛选对比。',
   jsonLd,
   path = '/',
+  keywords = [],
 } = Astro.props;
 
 const siteName = '机场大全 jichangdaquan.org';
 const canonical = new URL(path, Astro.site ?? 'https://jichangdaquan.org').href;
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const allKeywords = [...new Set([...keywords, ...BASE_KEYWORDS])].join(',');
 ---
 
 <!doctype html>
@@ -31,6 +50,8 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={allKeywords} />
+    <meta name="robots" content="index,follow" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
