@@ -208,6 +208,37 @@ function yamlList(arr) {
   return '\n' + arr.map((x) => `  - ${JSON.stringify(x)}`).join('\n');
 }
 
+// 线路类型的通俗说明
+const LINE_DESC = {
+  IEPL: 'IEPL 国际以太网专线，不过公网拥堵段，晚高峰稳定',
+  IPLC: 'IPLC 国际私用租赁专线，同样绕开公网，稳定性好',
+  'CN2 GIA': 'CN2 GIA 电信精品网，公网线路里的优质选择，性价比高',
+  BGP: 'BGP 多线智能路由，常见且价格友好',
+  中转: '境内中转到境外落地，价格低，质量取决于运营商',
+  Hysteria2: 'Hysteria2 抗丢包协议，弱网环境表现更好',
+  直连: '直连节点，延迟低、链路简单',
+};
+
+// 用途场景的通俗说明
+const USE_DESC = {
+  'AI/ChatGPT': '访问 ChatGPT、Claude 等 AI 服务',
+  流媒体: '观看 Netflix、Disney+ 等流媒体',
+  游戏加速: '游戏加速、降低延迟',
+  日常主力: '日常浏览、办公主力使用',
+  外贸办公: '外贸、跨境办公稳定连接',
+  低价备用: '低价备用、轻度使用',
+};
+
+// 价格档位的一句话定位
+function bandComment(price) {
+  if (price == null) return '';
+  if (price < 10) return '属于低价入门档，适合预算有限或作备用线路';
+  if (price < 20) return '属于主流性价比档，价格和体验较均衡';
+  if (price < 30) return '属于中端档，通常线路和解锁更稳定';
+  if (price < 50) return '属于中高端档，多为专线、面向稳定需求';
+  return '属于高端档，面向商务、高稳定或独享需求';
+}
+
 function toMarkdown(a) {
   const hasData = a.price != null || a.status === '跑路' || a.status === '停运' || a.status === '异常';
   const band = bandOf(a.price);
@@ -272,22 +303,102 @@ function toMarkdown(a) {
     lines.push('> ⚠️ 本页数据尚未独立核实（证据等级：待复测）。各项信息以机场官网为准，请勿仅凭本页直接年付。');
   }
   lines.push('');
+
+  // 跑路/停运机场：正文只做风险说明，不写推荐内容
+  if (a.status === '跑路' || a.status === '停运') {
+    lines.push(`### ${a.name}还能用吗？`);
+    lines.push('');
+    lines.push(`根据${a.source || '公开渠道'}信息，${a.name} 已被标记为「${a.status}」。这意味着节点可能已无法连接、后台无法登录或官方失联。**请勿再充值或续费**，避免资金损失。`);
+    lines.push('');
+    lines.push('如果你正在找替代，可到 [机场排名](/ranking/) 或 [机场列表](/airports/) 按价格和需求重新筛选，优先选运营时间长、支持月付试用的机场。怎么识别跑路信号见 [机场避坑指南](/blog/avoid-scam-airports/)。');
+    lines.push('');
+    return lines.join('\n');
+  }
+
   if (hasData && a.price != null) {
-    lines.push('### 概况');
+    // —— 概况 ——
+    lines.push(`### ${a.name}怎么样？`);
     lines.push('');
-    lines.push(`- **最低月付**：¥${a.price} 起${a.gb ? `（${a.gb}GB/月）` : ''}`);
-    if (a.lines && a.lines.length) lines.push(`- **线路**：${a.lines.join('、')}`);
-    if (a.protocols && a.protocols.length) lines.push(`- **协议**：${a.protocols.join('、')}`);
-    if (a.streaming && a.streaming.length) lines.push(`- **解锁**：${a.streaming.join('、')}`);
+    const introParts = [`${a.name} 最低月付 ¥${a.price} 起`];
+    if (a.gb) introParts.push(`每月 ${a.gb}GB 流量`);
+    if (a.lines && a.lines.length) introParts.push(`采用 ${a.lines.join('、')} 线路`);
+    let intro = introParts.join('，') + '。';
+    const bc = bandComment(a.price);
+    if (bc) intro += `价格上 ${bc}。`;
+    if (a.status === '异常') intro += `不过近期有异常反馈（${a.source || '公开渠道'}），建议只买月付、谨慎长约。`;
+    lines.push(intro);
     lines.push('');
-    lines.push('### 套餐与价格');
+    lines.push('| 项目 | 信息 |');
+    lines.push('| --- | --- |');
+    lines.push(`| 最低月付 | ¥${a.price} 起 |`);
+    if (a.gb) lines.push(`| 月流量 | ${a.gb} GB |`);
+    if (a.lines && a.lines.length) lines.push(`| 线路类型 | ${a.lines.join('、')} |`);
+    if (a.protocols && a.protocols.length) lines.push(`| 协议 | ${a.protocols.join('、')} |`);
+    if (a.streaming && a.streaming.length) lines.push(`| 流媒体/AI 解锁 | ${a.streaming.join('、')} |`);
+    lines.push(`| 价格档位 | ${band} |`);
     lines.push('');
-    lines.push('价格以官网实时信息为准，本页为公开信息整理。点击上方「前往注册」查看最新套餐。');
+
+    // —— 线路说明 ——
+    if (a.lines && a.lines.length) {
+      lines.push('### 线路与稳定性');
+      lines.push('');
+      a.lines.forEach((l) => {
+        if (LINE_DESC[l]) lines.push(`- **${l}**：${LINE_DESC[l]}。`);
+      });
+      lines.push('');
+      lines.push('线路类型直接影响晚高峰是否卡顿，专线（IEPL/IPLC）通常比公网中转更稳。线路科普见 [线路类型详解](/guide/concepts/route/)。');
+      lines.push('');
+    }
+
+    // —— 解锁能力 ——
+    if (a.streaming && a.streaming.length) {
+      lines.push('### 流媒体与 AI 解锁');
+      lines.push('');
+      lines.push(`据公开信息，${a.name} 支持解锁 ${a.streaming.join('、')}。`);
+      if (a.streaming.includes('Netflix')) lines.push('看 Netflix 的使用要点见 [Netflix 解锁教程](/guide/streaming/netflix/)。');
+      if (a.streaming.includes('ChatGPT')) lines.push('用 ChatGPT 的节点选择见 [ChatGPT 访问教程](/guide/streaming/chatgpt/)。');
+      lines.push('');
+      lines.push('解锁能力随节点和平台策略变化，请以实际测试为准。');
+      lines.push('');
+    }
+
+    // —— 适合人群 ——
+    if (a.use_cases && a.use_cases.length) {
+      lines.push('### 适合人群');
+      lines.push('');
+      a.use_cases.forEach((u) => {
+        if (USE_DESC[u]) lines.push(`- ${USE_DESC[u]}`);
+      });
+      lines.push('');
+    }
+
+    // —— 套餐与价格 ——
+    lines.push(`### ${a.name}多少钱？`);
+    lines.push('');
+    lines.push(
+      `${a.name} 最低月付 ¥${a.price} 起${a.gb ? `，含 ${a.gb}GB/月流量` : ''}。更高档位通常提供更多流量和设备数。具体套餐、年付优惠以官网结算页为准 —— 点击上方「${officialOnly ? '前往官网注册' : '前往注册'}」查看最新价格。`,
+    );
+    lines.push('');
+    lines.push('> 建议：新手先买月付试用，确认晚高峰稳定、解锁符合需求后，再考虑季付/年付，避免踩坑。');
+    lines.push('');
+  } else {
+    // 待复测机场
+    lines.push(`### ${a.name}怎么样？`);
+    lines.push('');
+    lines.push(`${a.name} 目前本站尚未收集到公开的价格与线路数据（证据等级：待复测）。详细套餐、线路、解锁能力请以 ${a.name} 官网为准，可点击上方按钮前往查看。`);
+    lines.push('');
+    lines.push('选购前建议参考 [机场选购指南](/blog/airport-buying-guide/)，并优先在 [机场排名](/ranking/) 里选已有数据、运营稳定的机场。');
     lines.push('');
   }
-  lines.push('### 优缺点');
+
+  // —— 相关推荐（内链）——
+  lines.push('### 相关推荐');
   lines.push('');
-  lines.push('_待补充实测。_');
+  lines.push('- [机场排名与排行榜](/ranking/)');
+  lines.push('- [梯子 / 翻墙 VPN 推荐](/vpn-recommend/)');
+  lines.push('- [全部机场列表与筛选](/airports/)');
+  if (a.use_cases && a.use_cases.includes('AI/ChatGPT')) lines.push('- [ChatGPT / AI 机场榜单](/best/chatgpt/)');
+  if (a.use_cases && a.use_cases.includes('流媒体')) lines.push('- [Netflix 流媒体机场榜单](/best/netflix/)');
   lines.push('');
   return lines.join('\n');
 }

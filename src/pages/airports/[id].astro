@@ -26,8 +26,38 @@ const verified = d.verified_at
   ? d.verified_at.toISOString().slice(0, 10)
   : '尚未核实';
 
-// schema.org Product + Review（评分存在时才给 AggregateRating，避免编造）
-const jsonLd: Record<string, unknown> = {
+// 长尾 FAQ：按真实字段生成，命中「XX怎么样/多少钱/支持Netflix吗/跑路了吗」等搜索词
+const faqs: { q: string; a: string }[] = [];
+const dead = d.status === '跑路' || d.status === '停运';
+faqs.push({
+  q: `${d.name}怎么样？`,
+  a: dead
+    ? `${d.name} 已被标记为「${d.status}」，不建议再使用或充值。`
+    : d.price_monthly_min != null
+      ? `${d.name} 最低月付 ¥${d.price_monthly_min} 起${d.lines.length ? `，采用 ${d.lines.join('、')} 线路` : ''}。数据为公开信息整理，以官网为准，建议先月付试用。`
+      : `${d.name} 本站暂无公开数据（待复测），详情以官网为准。`,
+});
+if (d.price_monthly_min != null && !dead) {
+  faqs.push({
+    q: `${d.name}多少钱？`,
+    a: `${d.name} 最低月付 ¥${d.price_monthly_min} 起${d.traffic_gb ? `，含 ${d.traffic_gb}GB/月` : ''}。更高档位流量更多，具体以官网结算页为准。`,
+  });
+}
+if (d.streaming.length && !dead) {
+  faqs.push({
+    q: `${d.name}支持${d.streaming.includes('Netflix') ? 'Netflix' : d.streaming[0]}吗？`,
+    a: `据公开信息，${d.name} 支持解锁 ${d.streaming.join('、')}。解锁能力随节点与平台策略变化，以实际测试为准。`,
+  });
+}
+faqs.push({
+  q: `${d.name}跑路了吗？安全吗？`,
+  a: dead
+    ? `${d.name} 当前状态为「${d.status}」，请勿充值。`
+    : `截至最后核实，本站未收到 ${d.name} 的跑路/停运报告，状态标记为「${STATUS_STYLE[d.status].label}」。但这不构成担保，机场行业变动快，建议月付试用、分散使用。`,
+});
+
+// schema.org：Product + FAQPage（评分存在时才给 AggregateRating，避免编造）
+const productLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: d.name,
@@ -35,13 +65,25 @@ const jsonLd: Record<string, unknown> = {
   category: '代理/VPN 订阅服务',
 };
 if (d.rating != null) {
-  jsonLd.aggregateRating = {
+  productLd.aggregateRating = {
     '@type': 'AggregateRating',
     ratingValue: d.rating,
     bestRating: 5,
     ratingCount: 1,
   };
 }
+const jsonLd: Record<string, unknown>[] = [
+  productLd,
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
 
 // 事实清单：有值才显示
 const facts: { label: string; value: string }[] = [];
@@ -143,6 +185,23 @@ if (d.traffic_gb != null) facts.push({ label: '流量', value: `${d.traffic_gb} 
     <div class="prose prose-sm mt-6 max-w-none border-t border-gray-100 pt-6">
       <Content />
     </div>
+
+    <!-- 常见问题 FAQ -->
+    {
+      faqs.length > 0 && (
+        <div class="mt-6 border-t border-gray-100 pt-6">
+          <h2 class="mb-3 text-lg font-bold">{d.name} 常见问题</h2>
+          <div class="space-y-2">
+            {faqs.map((f) => (
+              <details class="rounded-lg border border-gray-200 p-3">
+                <summary class="cursor-pointer text-sm font-medium text-gray-900">{f.q}</summary>
+                <p class="mt-2 text-sm text-gray-600">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      )
+    }
 
     <!-- 备用链接 / TG -->
     {
