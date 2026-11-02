@@ -3,6 +3,7 @@ name: "唯兔云"
 aliases: []
 affiliate_url: "https://haoze.v2yunvipaff.com/#/?code=trJG2874"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

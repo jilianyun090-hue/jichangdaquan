@@ -3,6 +3,7 @@ name: "山水云"
 aliases: []
 affiliate_url: "https://ss2.byvvcsx.com/#/register?code=jkziWeb8"
 backup_urls: []
+official_only: false
 telegram: "https://t.me/ssy5999"
 tier:
 budget_band: "¥10-20"

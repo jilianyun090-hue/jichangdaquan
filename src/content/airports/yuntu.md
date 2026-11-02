@@ -3,6 +3,7 @@ name: "云图"
 aliases: []
 affiliate_url: "https://super.ytjcok.org/#/register?code=qPHQtI9a"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥20-30"
 use_cases: 

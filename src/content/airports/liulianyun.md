@@ -3,6 +3,7 @@ name: "榴莲云"
 aliases: []
 affiliate_url: "https://haibing01.liulianyunaff.com/#/?code=0lnqSPF9"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

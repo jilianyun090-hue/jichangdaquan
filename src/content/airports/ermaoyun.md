@@ -3,6 +3,7 @@ name: "二猫云"
 aliases: []
 affiliate_url: "https://august.ermaoaff.com/#/register?code=EDo6hBTI"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥20-30"
 use_cases: 

@@ -3,6 +3,7 @@ name: "寰宇云"
 aliases: []
 affiliate_url: "https://vip3.huanyuyunbest.com/#/register?code=K6h5VWw2"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

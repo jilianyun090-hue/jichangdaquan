@@ -4,6 +4,7 @@ aliases: []
 affiliate_url: "https://haozevpn.jlyvipaff.com/#/?code=hBq1VTw4"
 backup_urls: 
   - "https://vipmjj01.jlyvipaff.com/#/?code=hBq1VTw4"
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

@@ -3,6 +3,7 @@ name: "闪电鼠"
 aliases: []
 affiliate_url: "https://haozevpn.shandianshuaff.com/#/?code=htqQLwdu"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

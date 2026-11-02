@@ -3,6 +3,7 @@ name: "极速cloud"
 aliases: []
 affiliate_url: "https://august.jsjc456789.com"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

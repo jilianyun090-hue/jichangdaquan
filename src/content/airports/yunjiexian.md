@@ -3,6 +3,7 @@ name: "云界线"
 aliases: []
 affiliate_url: "https://yiyige163.yunjiexianaff.com/#/?code=oetFP4xi"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

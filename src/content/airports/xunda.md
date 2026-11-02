@@ -3,6 +3,7 @@ name: "迅达VPN"
 aliases: []
 affiliate_url: "https://rcyt.ascsgg.com/register?code=lfITU4zy"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

@@ -3,6 +3,7 @@ name: "大佬云"
 aliases: []
 affiliate_url: "https://haozevpn01.dalaoyunaff.com/#/?code=xA9jCleY"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥20-30"
 use_cases: 

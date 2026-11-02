@@ -3,6 +3,7 @@ name: "Firefly"
 aliases: []
 affiliate_url: "http://haozevpn.fireflyaff.com/#/?code=t1Xo1DdU"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

@@ -3,6 +3,7 @@ name: "微风网络"
 aliases: []
 affiliate_url: "https://vip01.breezenetaff.com/#/?code=JxFsshSn"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

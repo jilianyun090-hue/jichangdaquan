@@ -3,6 +3,7 @@ name: "光速云"
 aliases: []
 affiliate_url: "https://kjlq01.gsyvipaff.cc/#/?code=b1OTkTeL"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

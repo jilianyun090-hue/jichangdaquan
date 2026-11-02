@@ -3,6 +3,7 @@ name: "跨界云"
 aliases: []
 affiliate_url: "https://haozevpn.kuajieaff.com/#/?code=dp4EdOAa"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

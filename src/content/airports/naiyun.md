@@ -3,6 +3,7 @@ name: "奈云"
 aliases: []
 affiliate_url: "https://www.anyaff.cc?path=register&code=A612DB2z"
 backup_urls: []
+official_only: false
 tier:
 budget_band:
 use_cases: []

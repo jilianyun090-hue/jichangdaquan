@@ -3,6 +3,7 @@ name: "鲤云"
 aliases: []
 affiliate_url: "https://ly888.liydl.com:8888/#/register?code=NQtRyXxd"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

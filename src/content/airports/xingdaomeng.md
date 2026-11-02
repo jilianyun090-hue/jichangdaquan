@@ -3,6 +3,7 @@ name: "星岛梦"
 aliases: []
 affiliate_url: "https://wuyou202001.xdmvipaff.cc/#/?code=olWCiAhj"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

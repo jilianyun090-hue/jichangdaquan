@@ -3,6 +3,7 @@ name: "神行加速"
 aliases: []
 affiliate_url: "https://haozevpn01.shenxingaff.com/#/?code=c2XNz7jn"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

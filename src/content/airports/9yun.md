@@ -3,6 +3,7 @@ name: "9云"
 aliases: []
 affiliate_url: "https://daoyi.jiuyyq.com"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

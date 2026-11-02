@@ -3,6 +3,7 @@ name: "龙猫云"
 aliases: []
 affiliate_url: "https://inv05.lmaff01.cc/register?aff=fQgKL9YC"
 backup_urls: []
+official_only: false
 tier:
 budget_band:
 use_cases: []

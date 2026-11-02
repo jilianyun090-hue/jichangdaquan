@@ -146,6 +146,61 @@ const AIRPORTS = [
   { name: '云界线', slug: 'yunjiexian', url: 'https://yiyige163.yunjiexianaff.com/#/?code=oetFP4xi',
     price: 18, lines: ['IEPL'], streaming: ['ChatGPT'], use_cases: ['AI/ChatGPT', '外贸办公'], source: 'tizizhan (ChatGPT无阻/高稳定性)' },
   { name: '浪网', slug: 'langwang', url: 'http://haozevpn.wavenetaff.com/#/?code=DsIhwoFs' },
+
+  // —— 参考站新增机场（无自有邀请链接，统一走中转「官网注册」）——
+  // 来源：clashxiazai / gptvpnhelper / tuijianvpn / clashx.pro（公开信息整理，价格取最低月付/起价）
+  { name: '悠兔', slug: 'youtu', price: 20, gb: 100, lines: ['IEPL', '中转'], streaming: ['Netflix', 'Disney+', 'HBO Max', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashxiazai / clashx.pro' },
+  { name: 'WgetCloud', slug: 'wgetcloud', price: 69, lines: ['IEPL', 'BGP'], protocols: ['Trojan', 'Shadowsocks'], streaming: ['Netflix', 'HBO Max', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '外贸办公'], source: 'clashxiazai / gptvpnhelper' },
+  { name: 'SSRDOG', slug: 'ssrdog', price: 25, gb: 150, lines: ['IPLC', 'IEPL'], streaming: ['Netflix', 'HBO Max', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashxiazai / clashx.pro' },
+  { name: 'Boost Net', slug: 'boostnet', price: 39, gb: 200, lines: ['IEPL'], protocols: ['AnyTLS'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashxiazai / gptvpnhelper' },
+  { name: 'SS-ID', slug: 'ss-id', price: 20, gb: 100, lines: ['IEPL'], streaming: ['Netflix', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '鹿语云', slug: 'luyuyun', price: 19, lines: ['IEPL'], streaming: ['Netflix', 'HBO Max', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashxiazai' },
+  { name: '一云梯', slug: 'yiyunti', price: 15, gb: 100, lines: ['IPLC'], protocols: ['Trojan'], streaming: ['Netflix', 'HBO Max', 'Disney+', 'YouTube'], use_cases: ['流媒体'], source: 'clashxiazai / clashx.pro' },
+  { name: 'SpeedCAT闪电猫', slug: 'speedcat', price: 19, gb: 100, lines: ['IPLC'], streaming: ['Netflix', 'HBO Max', 'Disney+', 'YouTube', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashxiazai / clashx.pro' },
+  { name: 'Riolu精灵学院', slug: 'riolu', price: 8, gb: 30, lines: ['中转', '直连'], streaming: ['Netflix', 'Disney+'], use_cases: ['流媒体', '低价备用'], source: 'clashxiazai / clashx.pro' },
+  { name: '蓝帆云', slug: 'lanfanyun', price: 9.9, gb: 50, lines: ['中转', 'IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashxiazai / clashx.pro' },
+  { name: '扬帆云', slug: 'yangfanyun', price: 15.99, lines: ['IPLC'], protocols: ['VMess'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashxiazai' },
+  { name: 'TNTCloud', slug: 'tntcloud', price: 20, gb: 110, lines: ['IPLC'], protocols: ['Trojan'], streaming: ['Netflix', 'Disney+', 'HBO Max', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'gptvpnhelper / clashx.pro' },
+  { name: '银河云', slug: 'yinheyun', price: 18, gb: 100, lines: ['IEPL'], protocols: ['Trojan'], streaming: ['Netflix', 'Disney+', 'YouTube', 'TikTok'], use_cases: ['流媒体'], source: 'gptvpnhelper / clashx.pro' },
+  { name: 'TAG', slug: 'tag', price: 61.67, gb: 500, lines: ['IEPL'], protocols: ['Shadowsocks'], streaming: ['Netflix', 'HBO Max', 'Disney+', 'Spotify'], use_cases: ['流媒体', '外贸办公'], source: 'gptvpnhelper / clashx.pro (季付折算)' },
+  { name: 'Nexitally', slug: 'nexitally', price: 123, gb: 500, lines: ['BGP'], streaming: ['TikTok'], use_cases: ['外贸办公', '游戏加速'], source: 'clashx.pro (独享IP/直播)' },
+  { name: 'Allblue', slug: 'allblue', price: 16.75, gb: 100, lines: ['IPLC'], streaming: ['Netflix', 'Disney+', 'YouTube', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'Mikasa', slug: 'mikasa', price: 15, gb: 100, lines: ['IPLC'], use_cases: ['日常主力'], source: 'clashx.pro' },
+  { name: 'Tolink', slug: 'tolink', price: 16.75, gb: 100, lines: ['IEPL'], use_cases: ['日常主力'], source: 'clashx.pro' },
+  { name: 'Gatern', slug: 'gatern', price: 24, gb: 120, lines: ['IPLC'], use_cases: ['日常主力'], source: 'clashx.pro' },
+  { name: 'CyberGuard', slug: 'cyberguard', price: 18, gb: 100, lines: ['IEPL', 'IPLC', '中转'], streaming: ['Netflix', 'Disney+', 'HBO Max', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'gptvpnhelper / clashx.pro' },
+  { name: '夜煞云', slug: 'yeshayun', price: 10, gb: 138, lines: ['中转', 'IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: 'SkyLinX', slug: 'skylinx', price: 8, gb: 50, lines: ['直连'], protocols: ['AnyTLS'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: '椰皮加速', slug: 'yepi', price: 14.9, gb: 150, lines: ['IEPL'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'FATCAT肥猫云', slug: 'fatcat', price: 20, gb: 120, lines: ['IEPL'], streaming: ['Netflix', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'YkkCloud', slug: 'ykkcloud', price: 14, gb: 150, lines: ['IEPL', 'IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashx.pro (奈飞免登录)' },
+  { name: '守候网络', slug: 'shouhou', price: 15, gb: 88, lines: ['中转', 'IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '小鸡快跑', slug: 'xiaojikuaipao', price: 15, gb: 100, lines: ['IPLC'], streaming: ['Netflix', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '库洛米', slug: 'kuromi', price: 32, gb: 50, streaming: ['Netflix', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'Coffee Cloud咖啡云', slug: 'coffeecloud', price: 10, gb: 130, lines: ['中转', 'IEPL'], streaming: ['ChatGPT'], use_cases: ['AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: 'COCODUCK小黄鸭', slug: 'cocoduck', price: 15, gb: 150, lines: ['中转'], protocols: ['VLESS'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'Fastlink', slug: 'fastlink', price: 20, gb: 100, lines: ['IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'MESL', slug: 'mesl', price: 50, gb: 200, lines: ['IEPL'], streaming: ['ChatGPT'], use_cases: ['AI/ChatGPT', '外贸办公'], source: 'clashx.pro / huanghaiwan' },
+  { name: '闪狐云', slug: 'shanhuyun', price: 20, gb: 120, lines: ['BGP', 'IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'Web3VPN', slug: 'web3vpn', price: 25, gb: 200, lines: ['中转', 'IPLC'], streaming: ['Netflix', 'Disney+'], use_cases: ['流媒体'], source: 'clashx.pro' },
+  { name: 'Fliggy Cloud飞天猪', slug: 'fliggy', price: 20, gb: 200, lines: ['IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '疾风云', slug: 'jifengyun', price: 11.9, gb: 50, lines: ['中转', 'IPLC'], streaming: ['Netflix', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: '次元链接', slug: 'ciyuan', price: 18.8, gb: 108, lines: ['IEPL'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '阿拉丁', slug: 'aladdin', price: 18, gb: 388, lines: ['中转'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'AMY机场', slug: 'amy', price: 57.75, gb: 300, lines: ['IEPL'], streaming: ['Netflix', 'Disney+'], use_cases: ['流媒体', '外贸办公'], source: 'clashx.pro' },
+  { name: 'Anyland', slug: 'anyland', price: 11.8, gb: 100, lines: ['中转', 'IEPL'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: '小蜜蜂', slug: 'xiaomifeng', price: 20, gb: 120, lines: ['IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'InfiniPort', slug: 'infiniport', price: 8, gb: 64, lines: ['中转'], use_cases: ['低价备用'], source: 'clashx.pro' },
+  { name: '贝贝云', slug: 'beibeiyun', price: 9.9, gb: 80, lines: ['中转'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: '小旋风', slug: 'xiaoxuanfeng', price: 20, gb: 110, lines: ['IPLC'], streaming: ['Netflix', 'Disney+', 'TikTok', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: 'Nyxen', slug: 'nyxen', price: 10, gb: 120, lines: ['IEPL', '中转'], streaming: ['ChatGPT'], use_cases: ['AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: '速云梯', slug: 'suyunti', price: 11.9, gb: 100, lines: ['中转', 'IPLC'], streaming: ['ChatGPT'], use_cases: ['AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: '蛋挞云', slug: 'danta', price: 7, gb: 99, lines: ['中转'], streaming: ['TikTok', 'ChatGPT'], use_cases: ['AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
+  { name: '尔湾云', slug: 'erwan', price: 13.9, gb: 50, lines: ['中转', 'IPLC'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '白月光', slug: 'baiyueguang', price: 15, gb: 100, lines: ['IEPL'], streaming: ['ChatGPT'], use_cases: ['AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '飞机云', slug: 'feijiyun', price: 15.9, gb: 80, lines: ['中转', 'IPLC'], use_cases: ['日常主力'], source: 'clashx.pro' },
+  { name: 'XXAI', slug: 'xxai', price: 16.9, gb: 100, lines: ['中转', 'IPLC', 'IEPL'], streaming: ['ChatGPT'], use_cases: ['AI/ChatGPT'], source: 'clashx.pro' },
+  { name: '泡泡狗', slug: 'paopaogou', price: 14, gb: 88, lines: ['IEPL'], streaming: ['Netflix', 'Disney+', 'ChatGPT'], use_cases: ['流媒体', 'AI/ChatGPT', '低价备用'], source: 'clashx.pro' },
 ];
 
 function yamlList(arr) {
@@ -159,12 +214,18 @@ function toMarkdown(a) {
   const evidence = hasData ? '公开信息整理' : '待复测';
   const status = a.status || '正常';
 
+  // 新增机场（无自有邀请链接）统一走中转链接，按钮显示「官网注册」
+  const GENERIC_URL = 'https://jichang-go.org/go.php';
+  const officialOnly = !a.url;
+  const url = a.url || GENERIC_URL;
+
   const lines = [];
   lines.push('---');
   lines.push(`name: ${JSON.stringify(a.name)}`);
   lines.push(`aliases: ${yamlList(a.aliases || [])}`);
-  lines.push(`affiliate_url: ${JSON.stringify(a.url)}`);
+  lines.push(`affiliate_url: ${JSON.stringify(url)}`);
   lines.push(`backup_urls: ${yamlList(a.backups || [])}`);
+  lines.push(`official_only: ${officialOnly}`);
   if (a.telegram) lines.push(`telegram: ${JSON.stringify(a.telegram)}`);
   lines.push('tier:');
   lines.push(band ? `budget_band: ${JSON.stringify(band)}` : 'budget_band:');

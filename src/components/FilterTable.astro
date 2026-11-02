@@ -43,6 +43,7 @@ const rows = airports.map((a) => {
     priceLabel,
     weight: d.weight,
     affiliate: d.affiliate_url,
+    officialOnly: d.official_only,
     statusStyle: STATUS_STYLE[d.status],
     evidenceStyle: EVIDENCE_STYLE[d.evidence],
   };
@@ -156,14 +157,20 @@ const rows = airports.map((a) => {
               >
                 详情
               </a>
-              <a
-                href={r.affiliate}
-                target="_blank"
-                rel="nofollow noopener sponsored"
-                class="rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
-              >
-                注册
-              </a>
+              {
+                r.affiliate ? (
+                  <a
+                    href={r.affiliate}
+                    target="_blank"
+                    rel="nofollow noopener sponsored"
+                    class="rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
+                  >
+                    {r.officialOnly ? '官网注册' : '注册'}
+                  </a>
+                ) : (
+                  <span class="rounded-md bg-gray-100 px-3 py-1.5 text-sm text-gray-400">链接待补充</span>
+                )
+              }
             </div>
           </div>
         </article>

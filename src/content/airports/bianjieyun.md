@@ -3,6 +3,7 @@ name: "边界云加速器"
 aliases: []
 affiliate_url: "https://www.lvpn.cc/r/6UQDZT"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

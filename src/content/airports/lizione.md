@@ -3,6 +3,7 @@ name: "Lizione"
 aliases: []
 affiliate_url: "https://lizione.vip/#/register?code=Wmf3jYMy"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

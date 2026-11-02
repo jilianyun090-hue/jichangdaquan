@@ -3,6 +3,7 @@ name: "快狸"
 aliases: []
 affiliate_url: "https://yyo649929.kuailiaff.com/#/register?code=G56QwHto"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

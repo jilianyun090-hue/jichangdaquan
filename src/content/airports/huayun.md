@@ -3,6 +3,7 @@ name: "花云"
 aliases: []
 affiliate_url: "https://api-flowercloud.com/aff.php?aff=16018"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥30-50"
 use_cases: 

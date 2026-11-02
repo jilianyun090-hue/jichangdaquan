@@ -3,6 +3,7 @@ name: "大哥云"
 aliases: []
 affiliate_url: "https://aff02.dgy02.com/#/register?code=T0q7hXMH"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

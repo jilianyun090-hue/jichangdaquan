@@ -22,9 +22,11 @@ const airports = defineCollection({
     name: z.string(),
     // 别名：用于站内搜索（有些机场有多个称呼）
     aliases: z.array(z.string()).default([]),
-    // 推广注册链接（主）与备用链接
-    affiliate_url: z.string().url(),
+    // 推广注册链接（主）与备用链接。留空(null)表示「链接待补充」，卡片仍展示。
+    affiliate_url: z.string().url().nullish(),
     backup_urls: z.array(z.string().url()).default([]),
+    // true：走统一中转链接、按钮显示「官网注册」，不暴露具体地址（参考站新增、无自有邀请链接的机场）
+    official_only: z.boolean().default(false),
     // Telegram 群组/频道
     telegram: z.string().url().optional(),
 

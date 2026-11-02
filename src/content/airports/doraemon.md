@@ -3,6 +3,7 @@ name: "哆啦A梦"
 aliases: []
 affiliate_url: "https://store.yyds2-doraemon.site/login/register?invite_code=5VxQMw0k"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

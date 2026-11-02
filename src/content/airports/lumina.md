@@ -3,6 +3,7 @@ name: "Lumina"
 aliases: []
 affiliate_url: "https://luminak.net/?token=lumina#/register?code=dCgHyjFi"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

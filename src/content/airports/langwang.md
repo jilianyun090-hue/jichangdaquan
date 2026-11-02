@@ -3,6 +3,7 @@ name: "浪网"
 aliases: []
 affiliate_url: "http://haozevpn.wavenetaff.com/#/?code=DsIhwoFs"
 backup_urls: []
+official_only: false
 tier:
 budget_band:
 use_cases: []

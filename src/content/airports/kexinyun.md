@@ -3,6 +3,7 @@ name: "可信云"
 aliases: []
 affiliate_url: "https://haibing822.kosingaff.com/#/register?code=zcjBlIde"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

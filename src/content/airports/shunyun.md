@@ -3,6 +3,7 @@ name: "瞬云"
 aliases: []
 affiliate_url: "https://ddd.jichang.best/#/register?code=o4I4kToe"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

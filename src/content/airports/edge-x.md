@@ -3,6 +3,7 @@ name: "Edge-X"
 aliases: []
 affiliate_url: "https://edge-invite.com/#/register?code=73ienU2h"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

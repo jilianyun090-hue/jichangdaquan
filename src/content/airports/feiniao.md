@@ -3,6 +3,7 @@ name: "飞鸟"
 aliases: []
 affiliate_url: "https://fbinv02.fbaff.cc/auth/register?code=tKfsJoVl"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

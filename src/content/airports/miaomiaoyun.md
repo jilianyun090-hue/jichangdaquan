@@ -3,6 +3,7 @@ name: "秒秒云"
 aliases: []
 affiliate_url: "https://141.11.77.26/#/register?code=g3bq7bpK"
 backup_urls: []
+official_only: false
 telegram: "https://t.me/mmy7777"
 tier:
 budget_band: "¥10-20"

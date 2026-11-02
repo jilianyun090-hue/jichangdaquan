@@ -3,6 +3,7 @@ name: "飞猫云"
 aliases: []
 affiliate_url: "https://flycat.flycatvipaff.cc/#/?code=1arEKHqh"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

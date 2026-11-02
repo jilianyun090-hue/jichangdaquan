@@ -3,6 +3,7 @@ name: "可达加速器"
 aliases: []
 affiliate_url: "https://1.mkd997.com/?page=register&code=5KnBzRqS"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

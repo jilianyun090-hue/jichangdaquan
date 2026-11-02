@@ -4,6 +4,7 @@ aliases: []
 affiliate_url: "https://calvior.speed-world.cc/#/register?code=r7IOqoY7"
 backup_urls: 
   - "https://everett7623.speedworldaff.com/#/register?code=r7IOqoY7"
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

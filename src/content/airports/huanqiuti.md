@@ -3,6 +3,7 @@ name: "环球梯"
 aliases: []
 affiliate_url: "https://haozevpn01.huanqiutiaff.com/#/?code=2xpedcFa"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

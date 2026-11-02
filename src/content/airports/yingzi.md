@@ -3,6 +3,7 @@ name: "影子VPN"
 aliases: []
 affiliate_url: "https://www.yingzi01.com/register?code=X7XPN1cS"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

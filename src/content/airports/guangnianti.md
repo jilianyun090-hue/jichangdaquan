@@ -3,6 +3,7 @@ name: "光年梯"
 aliases: []
 affiliate_url: "https://gnt001.gntvipaff.cc/#/?code=j1ufpE44"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

@@ -3,6 +3,7 @@ name: "NICE加速"
 aliases: []
 affiliate_url: "https://web.nicecc.cc/#/register?code=7nNS5xdG"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

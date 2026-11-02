@@ -3,6 +3,7 @@ name: "隐云"
 aliases: []
 affiliate_url: "https://wkacc.xyz/?code=711d7afb"
 backup_urls: []
+official_only: false
 tier:
 budget_band:
 use_cases: []

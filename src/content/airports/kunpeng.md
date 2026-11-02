@@ -3,6 +3,7 @@ name: "鲲鹏加速"
 aliases: []
 affiliate_url: "https://kunpengjiasu.com/#/register?code=QAo8sMhc"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10-20"
 use_cases: 

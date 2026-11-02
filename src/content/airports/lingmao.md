@@ -3,6 +3,7 @@ name: "灵猫"
 aliases: []
 affiliate_url: "https://haozevpn.civetaff.com/#/?code=1pboeliL"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

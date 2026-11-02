@@ -3,6 +3,7 @@ name: "青云梯"
 aliases: []
 affiliate_url: "https://a09.qytaff02.cc/register?aff=FSYW2vrc"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

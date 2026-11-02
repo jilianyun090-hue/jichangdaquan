@@ -3,6 +3,7 @@ name: "锦云"
 aliases: []
 affiliate_url: "https://216.236.63.115/#/register?code=BIGc8qrQ"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

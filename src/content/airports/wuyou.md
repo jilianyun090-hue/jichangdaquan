@@ -3,6 +3,7 @@ name: "无忧链接"
 aliases: []
 affiliate_url: "https://haozevpn.fireflyaff.com/#/?code=XQ4fNPfi"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

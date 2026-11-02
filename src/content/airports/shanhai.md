@@ -3,6 +3,7 @@ name: "山海机场"
 aliases: []
 affiliate_url: "https://shanhai.sbs/#/register?code=qVTbPfWP"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

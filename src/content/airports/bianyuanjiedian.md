@@ -3,6 +3,7 @@ name: "边缘节点"
 aliases: []
 affiliate_url: "https://zoio.edgenovaaff.cc/#/register?code=Oy1wZvzJ"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥10以下"
 use_cases: 

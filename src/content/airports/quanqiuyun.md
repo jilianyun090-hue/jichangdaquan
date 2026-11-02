@@ -3,6 +3,7 @@ name: "全球云"
 aliases: []
 affiliate_url: "https://haozevpn.gcvipaff.cc/#/?code=WRQJc2v4"
 backup_urls: []
+official_only: false
 tier:
 budget_band: "¥20-30"
 use_cases: 

@@ -3,6 +3,7 @@ name: "Runway Cloud"
 aliases: []
 affiliate_url: "https://sxzofrnamc.runwayhz.com/#/register?code=A63zaSvx"
 backup_urls: []
+official_only: false
 tier:
 budget_band:
 use_cases: []
