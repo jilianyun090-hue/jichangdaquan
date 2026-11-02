@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jichangdaquan.org/sitemap-index.xml

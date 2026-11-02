@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<Base
+  title="博客 · 教程与选购指南"
+  description="机场选购指南、Clash/v2ray 使用教程、避坑与行情资讯。"
+  path="/blog/"
+>
+  <h1 class="mb-6 text-2xl font-bold">博客</h1>
+  <div class="space-y-4">
+    {
+      posts.map((p) => (
+        <a
+          href={`/blog/${p.id}/`}
+          class="block rounded-xl border border-gray-200 bg-white p-5 transition hover:shadow-md"
+        >
+          <div class="flex items-center gap-2 text-xs text-gray-400">
+            <span class="rounded bg-gray-100 px-2 py-0.5 text-gray-600">{p.data.category}</span>
+            <time>{p.data.pubDate.toISOString().slice(0, 10)}</time>
+          </div>
+          <h2 class="mt-2 font-semibold text-gray-900">{p.data.title}</h2>
+          <p class="mt-1 text-sm text-gray-500">{p.data.description}</p>
+        </a>
+      ))
+    }
+    {posts.length === 0 && <p class="text-gray-400">暂无文章。</p>}
+  </div>
+</Base>

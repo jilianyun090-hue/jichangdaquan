@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** 结构化数据（JSON-LD），可选 */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** 当前页规范链接的 path，如 /airports/dageyun/ */
+  path?: string;
+}
+
+const {
+  title,
+  description = '机场大全 —— 收录市面主流机场（VPN/代理订阅服务），按价格、用途、线路、流媒体解锁多维筛选，帮你快速选到合适的机场。',
+  jsonLd,
+  path = '/',
+} = Astro.props;
+
+const siteName = '机场大全 jichangdaquan.org';
+const canonical = new URL(path, Astro.site ?? 'https://jichangdaquan.org').href;
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
+    {
+      jsonLd && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+    <Header />
+    <main class="mx-auto w-full max-w-6xl px-4 py-8">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

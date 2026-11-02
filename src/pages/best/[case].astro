@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AirportCard from '../../components/AirportCard.astro';
+import { BEST_PAGES } from '../../data/taxonomy';
+
+export async function getStaticPaths() {
+  return BEST_PAGES.map((b) => ({ params: { case: b.slug }, props: { best: b } }));
+}
+
+const { best } = Astro.props;
+const all = await getCollection('airports');
+
+// 命中该用途的机场；数据未填用途的也列出（标注待复测），避免空榜。
+const matched = all.filter((a) => a.data.use_cases.includes(best.useCase as any));
+const matchedSet = new Set(matched.map((a) => a.id));
+const others = all.filter((a) => !matchedSet.has(a.id));
+
+matched.sort((a, b) => b.data.weight - a.data.weight);
+others.sort((a, b) => a.data.name.localeCompare(b.data.name, 'zh'));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: best.title,
+  numberOfItems: matched.length,
+};
+---
+
+<Base title={best.title} description={`${best.title}。按证据等级与客观信息整理，数据待复测的已明确标注。`} jsonLd={jsonLd} path={`/best/${best.case ?? ''}/`}>
+  <h1 class="mb-2 text-2xl font-bold">{best.title}</h1>
+  <p class="mb-6 text-gray-500">
+    面向「{best.useCase}」场景的机场推荐。标注「待复测」的条目尚未独立核实，请以官网为准。
+  </p>
+
+  {
+    matched.length > 0 ? (
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {matched.map((a) => (
+          <AirportCard airport={a} />
+        ))}
+      </div>
+    ) : (
+      <div class="rounded-xl border border-dashed border-gray-300 bg-white p-6 text-center text-gray-400">
+        该场景的推荐名单正在核实整理中。下方为全部收录机场，供参考。
+      </div>
+    )
+  }
+
+  <details class="mt-8">
+    <summary class="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+      展开全部机场（待复测）
+    </summary>
+    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {others.map((a) => <AirportCard airport={a} />)}
+    </div>
+  </details>
+</Base>

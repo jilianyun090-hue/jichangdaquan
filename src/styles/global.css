@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+:root {
+  --brand: #2563eb;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    'PingFang SC',
+    'Microsoft YaHei',
+    sans-serif;
+}
+
+/* 表格筛选被隐藏的行 */
+[data-hidden='true'] {
+  display: none !important;
+}

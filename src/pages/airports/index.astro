@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import FilterTable from '../../components/FilterTable.astro';
+
+const airports = await getCollection('airports');
+airports.sort((a, b) => b.data.weight - a.data.weight || a.data.name.localeCompare(b.data.name, 'zh'));
+const total = airports.length;
+---
+
+<Base
+  title="机场列表 · 全部收录"
+  description={`机场大全收录的全部 ${total} 家机场，支持按价格、用途、线路、流媒体解锁筛选。`}
+  path="/airports/"
+>
+  <h1 class="mb-2 text-2xl font-bold">机场列表</h1>
+  <p class="mb-6 text-gray-500">共收录 {total} 家机场。用下方筛选快速定位。</p>
+  <FilterTable airports={airports} />
+</Base>

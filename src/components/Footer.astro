@@ -1,0 +1,24 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-12 border-t border-gray-200 bg-white">
+  <div class="mx-auto max-w-6xl px-4 py-8 text-sm text-gray-500">
+    <div class="rounded-lg bg-amber-50 p-4 text-amber-800">
+      <strong>免责声明：</strong
+      >本站为信息聚合与导航站，收录的机场（代理/VPN 订阅服务）信息来自公开渠道，
+      <strong>多数数据尚未独立核实（证据等级「待复测」）</strong
+      >，请以各机场官网为准。本站部分链接为推广链接，可能获得返佣，但不影响客观收录。
+      请在遵守所在地区法律法规的前提下使用相关服务，本站不对任何服务的可用性、稳定性或后果负责。
+    </div>
+    <div class="mt-6 flex flex-col justify-between gap-4 md:flex-row">
+      <p>© {year} 机场大全 jichangdaquan.org</p>
+      <nav class="flex gap-4">
+        <a href="/airports/" class="hover:text-gray-900">机场列表</a>
+        <a href="/guide/" class="hover:text-gray-900">教程指南</a>
+        <a href="/blog/" class="hover:text-gray-900">博客</a>
+        <a href="/rss.xml" class="hover:text-gray-900">RSS</a>
+      </nav>
+    </div>
+  </div>
+</footer>

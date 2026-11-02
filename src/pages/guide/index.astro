@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { GUIDE_CATEGORIES } from '../../data/taxonomy';
+
+const guides = await getCollection('guides', ({ data }) => !data.draft);
+
+// 每个板块下的文章数与前几篇
+const byCat = GUIDE_CATEGORIES.map((c) => {
+  const items = guides
+    .filter((g) => g.data.category === c.slug)
+    .sort((a, b) => a.data.order - b.data.order);
+  return { ...c, items };
+});
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '教程指南 · 机场大全知识库',
+  url: 'https://jichangdaquan.org/guide/',
+};
+---
+
+<Base
+  title="教程指南 · 知识库"
+  description="机场使用全攻略：入门、客户端教程、基础概念、访问常用网站、流媒体解锁、故障排查。零基础也能看懂。"
+  jsonLd={jsonLd}
+  path="/guide/"
+>
+  <h1 class="text-2xl font-bold">教程指南</h1>
+  <p class="mt-2 text-gray-500">
+    从零开始用机场的全套教程。按下面 6 个板块组织，内容持续更新。
+  </p>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      byCat.map((c) => (
+        <a
+          href={`/guide/${c.slug}/`}
+          class="flex flex-col rounded-xl border border-gray-200 bg-white p-5 transition hover:shadow-md"
+        >
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">{c.icon}</span>
+            <h2 class="font-semibold text-gray-900">{c.name}</h2>
+            <span class="ml-auto text-xs text-gray-400">{c.items.length} 篇</span>
+          </div>
+          <p class="mt-2 text-sm text-gray-500">{c.desc}</p>
+          {c.items.length > 0 && (
+            <ul class="mt-3 space-y-1 border-t border-gray-100 pt-3 text-sm text-gray-600">
+              {c.items.slice(0, 4).map((g) => (
+                <li class="truncate">· {g.data.title}</li>
+              ))}
+            </ul>
+          )}
+        </a>
+      ))
+    }
+  </div>
+</Base>

@@ -1,0 +1,172 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { STATUS_STYLE, EVIDENCE_STYLE } from '../../data/taxonomy';
+
+export async function getStaticPaths() {
+  const airports = await getCollection('airports');
+  return airports.map((a) => ({ params: { id: a.id }, props: { airport: a } }));
+}
+
+const { airport } = Astro.props;
+const d = airport.data;
+const { Content } = await render(airport);
+
+const statusStyle = STATUS_STYLE[d.status];
+const evidenceStyle = EVIDENCE_STYLE[d.evidence];
+
+const priceLabel =
+  d.price_monthly_min != null
+    ? d.price_monthly_max != null && d.price_monthly_max !== d.price_monthly_min
+      ? `¥${d.price_monthly_min}–${d.price_monthly_max}/月`
+      : `¥${d.price_monthly_min}/月起`
+    : '待复测';
+
+const verified = d.verified_at
+  ? d.verified_at.toISOString().slice(0, 10)
+  : '尚未核实';
+
+// schema.org Product + Review（评分存在时才给 AggregateRating，避免编造）
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: d.name,
+  description: d.summary,
+  category: '代理/VPN 订阅服务',
+};
+if (d.rating != null) {
+  jsonLd.aggregateRating = {
+    '@type': 'AggregateRating',
+    ratingValue: d.rating,
+    bestRating: 5,
+    ratingCount: 1,
+  };
+}
+
+// 事实清单：有值才显示
+const facts: { label: string; value: string }[] = [];
+if (d.tier) facts.push({ label: '等级', value: d.tier });
+if (d.budget_band) facts.push({ label: '价位', value: d.budget_band });
+if (d.lines.length) facts.push({ label: '线路', value: d.lines.join('、') });
+if (d.protocols.length) facts.push({ label: '协议', value: d.protocols.join('、') });
+if (d.regions.length) facts.push({ label: '节点', value: d.regions.join('、') });
+if (d.streaming.length) facts.push({ label: '解锁', value: d.streaming.join('、') });
+if (d.payment.length) facts.push({ label: '支付', value: d.payment.join('、') });
+if (d.traffic_gb != null) facts.push({ label: '流量', value: `${d.traffic_gb} GB/月` });
+---
+
+<Base
+  title={`${d.name} 怎么样？评测与注册`}
+  description={`${d.name} 机场评测：价格、线路、流媒体解锁、节点与注册入口。${d.summary}`}
+  jsonLd={jsonLd}
+  path={`/airports/${airport.id}/`}
+>
+  <nav class="mb-4 text-sm text-gray-400">
+    <a href="/" class="hover:text-gray-600">首页</a> ›
+    <a href="/airports/" class="hover:text-gray-600">机场列表</a> ›
+    <span class="text-gray-600">{d.name}</span>
+  </nav>
+
+  <div class="rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold">{d.name}</h1>
+        <div class="mt-2 flex flex-wrap gap-2 text-xs">
+          <span class={`rounded-full px-2 py-0.5 ${statusStyle.cls}`}>{statusStyle.label}</span>
+          <span class={`rounded px-2 py-0.5 ${evidenceStyle.cls}`}>证据：{d.evidence}</span>
+          {d.rating != null && <span class="rounded bg-yellow-100 px-2 py-0.5 text-yellow-700">★ {d.rating}</span>}
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="text-lg font-bold text-gray-900">{priceLabel}</div>
+        <a
+          href={d.affiliate_url}
+          target="_blank"
+          rel="nofollow noopener sponsored"
+          class="mt-2 inline-block rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700"
+        >
+          前往注册 →
+        </a>
+      </div>
+    </div>
+
+    {
+      (d.status === '停运' || d.status === '跑路') && (
+        <div class="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+          ⛔ 该机场已被标记为「{d.status}」，请勿充值，谨防损失。
+        </div>
+      )
+    }
+
+    {
+      facts.length > 0 && (
+        <dl class="mt-6 grid gap-x-6 gap-y-3 border-t border-gray-100 pt-6 text-sm sm:grid-cols-2">
+          {facts.map((f) => (
+            <div class="flex gap-3">
+              <dt class="w-16 shrink-0 text-gray-400">{f.label}</dt>
+              <dd class="text-gray-800">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+
+    {
+      (d.pros.length > 0 || d.cons.length > 0) && (
+        <div class="mt-6 grid gap-4 border-t border-gray-100 pt-6 sm:grid-cols-2">
+          <div>
+            <h3 class="mb-2 font-semibold text-green-700">✅ 优点</h3>
+            <ul class="list-inside list-disc space-y-1 text-sm text-gray-600">
+              {d.pros.length ? d.pros.map((p) => <li>{p}</li>) : <li class="text-gray-400">待复测</li>}
+            </ul>
+          </div>
+          <div>
+            <h3 class="mb-2 font-semibold text-red-700">❌ 缺点</h3>
+            <ul class="list-inside list-disc space-y-1 text-sm text-gray-600">
+              {d.cons.length ? d.cons.map((c) => <li>{c}</li>) : <li class="text-gray-400">待复测</li>}
+            </ul>
+          </div>
+        </div>
+      )
+    }
+
+    <!-- 正文（Markdown）-->
+    <div class="prose prose-sm mt-6 max-w-none border-t border-gray-100 pt-6">
+      <Content />
+    </div>
+
+    <!-- 备用链接 / TG -->
+    {
+      (d.backup_urls.length > 0 || d.telegram) && (
+        <div class="mt-6 border-t border-gray-100 pt-6 text-sm">
+          {d.backup_urls.length > 0 && (
+            <p class="text-gray-500">
+              备用注册：
+              {d.backup_urls.map((u, i) => (
+                <>
+                  {i > 0 && ' · '}
+                  <a href={u} target="_blank" rel="nofollow noopener sponsored" class="text-blue-600 hover:underline">
+                    链接{i + 1}
+                  </a>
+                </>
+              ))}
+            </p>
+          )}
+          {d.telegram && (
+            <p class="mt-1 text-gray-500">
+              Telegram：
+              <a href={d.telegram} target="_blank" rel="noopener" class="text-blue-600 hover:underline">
+                {d.telegram}
+              </a>
+            </p>
+          )}
+        </div>
+      )
+    }
+
+    <div class="mt-6 border-t border-gray-100 pt-4 text-xs text-gray-400">
+      <p>最后核实时间：{verified}</p>
+      <p class="mt-1">{d.affiliate_relationship}</p>
+    </div>
+  </div>
+</Base>

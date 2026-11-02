@@ -1,0 +1,3 @@
+# Cloudflare Pages 重定向规则
+# 旧路径或常见误访问可在这里补充，例如：
+# /jichang  /airports/  301

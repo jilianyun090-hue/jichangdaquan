@@ -1,0 +1,123 @@
+---
+import { GUIDE_CATEGORIES } from '../data/taxonomy';
+
+// 顶部主导航
+const primary = [
+  { href: '/', label: '首页' },
+  { href: '/airports/', label: '机场列表' },
+];
+
+// 「榜单」下拉
+const rankings = [
+  { href: '/best/chatgpt/', label: 'ChatGPT / AI 机场' },
+  { href: '/best/netflix/', label: '流媒体解锁机场' },
+  { href: '/best/cheap/', label: '便宜机场' },
+  { href: '/best/game/', label: '游戏加速机场' },
+  { href: '/best/office/', label: '外贸办公机场' },
+];
+
+// 「教程指南」下拉 —— 6 个板块
+const guides = GUIDE_CATEGORIES.map((c) => ({
+  href: `/guide/${c.slug}/`,
+  label: `${c.icon} ${c.name}`,
+}));
+---
+
+<header class="sticky top-0 z-30 border-b border-gray-200 bg-white/90 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+    <a href="/" class="flex items-center gap-2 font-bold text-gray-900">
+      <span class="grid h-8 w-8 place-items-center rounded-lg bg-blue-600 text-white">机</span>
+      <span>机场大全</span>
+    </a>
+
+    <!-- 桌面导航 -->
+    <nav class="hidden items-center gap-1 text-sm md:flex">
+      {
+        primary.map((n) => (
+          <a href={n.href} class="rounded-md px-3 py-2 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900">
+            {n.label}
+          </a>
+        ))
+      }
+
+      <!-- 榜单下拉 -->
+      <div class="group relative">
+        <button class="flex items-center gap-1 rounded-md px-3 py-2 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900">
+          榜单 <span class="text-xs">▾</span>
+        </button>
+        <div class="invisible absolute left-0 top-full w-56 pt-1 opacity-0 transition group-hover:visible group-hover:opacity-100">
+          <div class="rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
+            {
+              rankings.map((r) => (
+                <a href={r.href} class="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  {r.label}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- 教程指南下拉 -->
+      <div class="group relative">
+        <button class="flex items-center gap-1 rounded-md px-3 py-2 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900">
+          教程指南 <span class="text-xs">▾</span>
+        </button>
+        <div class="invisible absolute left-0 top-full w-56 pt-1 opacity-0 transition group-hover:visible group-hover:opacity-100">
+          <div class="rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
+            <a href="/guide/" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100">
+              📖 指南首页
+            </a>
+            <div class="my-1 border-t border-gray-100"></div>
+            {
+              guides.map((g) => (
+                <a href={g.href} class="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  {g.label}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <a href="/blog/" class="rounded-md px-3 py-2 text-gray-600 transition hover:bg-gray-100 hover:text-gray-900">
+        博客
+      </a>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <details class="relative md:hidden">
+      <summary class="cursor-pointer list-none rounded-md border border-gray-300 px-3 py-2 text-sm">菜单</summary>
+      <div class="absolute right-0 z-40 mt-2 max-h-[70vh] w-60 overflow-y-auto rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
+        {
+          primary.map((n) => (
+            <a href={n.href} class="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              {n.label}
+            </a>
+          ))
+        }
+        <p class="px-3 pb-1 pt-3 text-xs font-medium text-gray-400">榜单</p>
+        {
+          rankings.map((r) => (
+            <a href={r.href} class="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              {r.label}
+            </a>
+          ))
+        }
+        <p class="px-3 pb-1 pt-3 text-xs font-medium text-gray-400">教程指南</p>
+        <a href="/guide/" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100">
+          📖 指南首页
+        </a>
+        {
+          guides.map((g) => (
+            <a href={g.href} class="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              {g.label}
+            </a>
+          ))
+        }
+        <div class="my-1 border-t border-gray-100"></div>
+        <a href="/blog/" class="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">博客</a>
+      </div>
+    </details>
+  </div>
+</header>
