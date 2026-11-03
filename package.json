@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "gen:airports": "node scripts/gen-airports.mjs"
+    "gen:airports": "node scripts/gen-airports.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",

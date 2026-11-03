@@ -100,6 +100,31 @@ export type Status = (typeof STATUSES)[number];
 export const EVIDENCE_LEVELS = ['实测', '公开信息整理', '待复测'] as const;
 export type EvidenceLevel = (typeof EVIDENCE_LEVELS)[number];
 
+/**
+ * 综合推荐排序（品牌横向对比用）。
+ * 列在这里的机场按此顺序置顶，极连云第一、光年梯第二，其余顺延；
+ * 未列出的机场排在后面（按价格升序）。
+ * slug 需与 src/content/airports/<slug>.md 一致。
+ */
+export const RECOMMEND_ORDER = [
+  'jilianyun', // 极连云 #1
+  'guangnianti', // 光年梯 #2
+  'feimaoyun', // 飞猫云
+  'guangsuyun', // 光速云
+  'xingdaomeng', // 星岛梦
+  'quanqiuyun', // 全球云
+  'yuntu', // 云图
+  'lingmao', // 灵猫
+  'kunpeng', // 鲲鹏加速
+  'lizione', // Lizione
+] as const;
+
+/** 返回某 slug 的推荐序号（越小越靠前）；未列出的返回大数 */
+export function recommendRank(slug: string): number {
+  const i = (RECOMMEND_ORDER as readonly string[]).indexOf(slug);
+  return i === -1 ? 9999 : i;
+}
+
 /** 榜单落地页定义：best/[case] */
 export const BEST_PAGES = [
   { slug: 'chatgpt', title: 'ChatGPT / AI 机场推荐', useCase: 'AI/ChatGPT' },
