@@ -167,37 +167,37 @@ export const GUIDE_CATEGORIES = [
     slug: 'getting-started',
     name: '入门',
     desc: '第一次用机场？从这里开始：选方案、买订阅、装客户端。',
-    icon: '🚀',
+    icon: '',
   },
   {
     slug: 'clients',
     name: '客户端教程',
     desc: 'Windows / macOS / iOS / Android 各平台客户端的安装与订阅导入。',
-    icon: '📱',
+    icon: '',
   },
   {
     slug: 'concepts',
     name: '基础概念',
     desc: '线路、协议、测速、名词解释，搞懂机场背后的原理。',
-    icon: '📚',
+    icon: '',
   },
   {
     slug: 'access',
     name: '爱访问',
     desc: '怎么访问 Google、YouTube、GitHub 等常用海外网站。',
-    icon: '🌐',
+    icon: '',
   },
   {
     slug: 'streaming',
     name: '流媒体解锁',
     desc: 'Netflix、Disney+、YouTube Premium、ChatGPT 的解锁与使用。',
-    icon: '🎬',
+    icon: '',
   },
   {
     slug: 'troubleshooting',
     name: '故障排查',
     desc: '连不上、打不开、速度慢、ChatGPT 403……对症解决。',
-    icon: '🛠️',
+    icon: '',
   },
 ] as const;
 

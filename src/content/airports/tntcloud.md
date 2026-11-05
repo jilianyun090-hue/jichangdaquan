@@ -37,7 +37,7 @@ weight: 10
 
 ## TNTCloud
 
-> ℹ️ 本页数据为公开信息整理（来源：gptvpnhelper / clashx.pro，2026-11），非本站独立实测。价格、流量、解锁能力以机场官网实时信息为准。
+> ℹ 本页数据为公开信息整理（来源：gptvpnhelper / clashx.pro，2026-11），非本站独立实测。价格、流量、解锁能力以机场官网实时信息为准。
 
 ### TNTCloud怎么样？
 
