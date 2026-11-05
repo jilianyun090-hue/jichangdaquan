@@ -183,7 +183,7 @@ export const GUIDE_CATEGORIES = [
   },
   {
     slug: 'access',
-    name: '爱访问',
+    name: 'AI访问',
     desc: '怎么访问 Google、YouTube、GitHub 等常用海外网站。',
     icon: '',
   },
