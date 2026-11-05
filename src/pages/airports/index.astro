@@ -2,9 +2,9 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import FilterTable from '../../components/FilterTable.astro';
+import { sortByRecommendation } from '../../data/taxonomy';
 
-const airports = await getCollection('airports');
-airports.sort((a, b) => b.data.weight - a.data.weight || a.data.name.localeCompare(b.data.name, 'zh'));
+const airports = sortByRecommendation(await getCollection('airports'));
 const total = airports.length;
 ---
 

@@ -1,21 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { STATUS_STYLE, recommendRank } from '../../data/taxonomy';
+import { STATUS_STYLE, recommendRank, sortByRecommendation } from '../../data/taxonomy';
 
 const year = new Date().getFullYear();
-const all = await getCollection('airports');
+const all = sortByRecommendation(await getCollection('airports'));
 
-// 排序：先按综合推荐顺序（极连云#1、光年梯#2…），再按价格升序，跑路/停运沉底
-const sorted = [...all].sort((a, b) => {
-  const da = a.data.status === '跑路' || a.data.status === '停运' ? 1 : 0;
-  const db = b.data.status === '跑路' || b.data.status === '停运' ? 1 : 0;
-  if (da !== db) return da - db;
-  const ra = recommendRank(a.id);
-  const rb = recommendRank(b.id);
-  if (ra !== rb) return ra - rb;
-  return (a.data.price_monthly_min ?? 99999) - (b.data.price_monthly_min ?? 99999);
-});
+const sorted = all;
 
 const priceLabel = (a: (typeof all)[number]) =>
   a.data.price_monthly_min != null ? `¥${a.data.price_monthly_min}` : '—';
@@ -36,18 +27,18 @@ const jsonLd = {
 
 <Base
   title={`机场横向对比 ${year} · 品牌对比表`}
-  description={`${sorted.length} 家机场横向对比表：价格、流量、线路、流媒体解锁、支付、状态逐项并排，按综合推荐排序，极连云、光年梯领先。数据为公开信息整理，以官网为准。`}
+  description={`${sorted.length} 家机场横向对比表：并排查看价格、流量、线路、解锁标签和状态，顺序采用站点编辑推荐序列。公开资料以机场官网为准。`}
   keywords={['机场对比', '机场横向对比', '机场品牌对比', '机场推荐', '机场排名']}
   jsonLd={jsonLd}
   path="/compare/"
 >
   <div class="flex flex-wrap items-end justify-between gap-2">
     <h1 class="text-2xl font-bold">品牌横向对比</h1>
-    <span class="text-sm text-gray-400">按综合推荐排序 · 共 {sorted.length} 家</span>
+  <span class="text-sm text-gray-400">按编辑推荐顺序 · 共 {sorted.length} 家</span>
   </div>
   <p class="mt-2 max-w-3xl text-gray-500">
     把各家机场的价格、流量、线路、流媒体/AI 解锁、支付与运营状态并排放在一张表里，方便横向比较。
-    排序综合价格与推荐度，数据为公开信息整理，非独立实测，<strong>以官网为准</strong>。
+    榜单顺序按站点编辑推荐序列排列，不代表测速分数或独立实测结论。数据为公开信息整理，<strong>以官网为准</strong>。
   </p>
 
   <div class="mt-6 overflow-x-auto rounded-xl border border-gray-200 bg-white">
@@ -71,7 +62,7 @@ const jsonLd = {
             const top = i < 2 && recommendRank(a.id) < 9999;
             return (
               <tr class={`border-b border-gray-100 last:border-0 ${top ? 'bg-amber-50/60' : ''}`}>
-                <td class="px-3 py-3 font-medium text-gray-400">
+    <td class="px-3 py-3 font-medium text-gray-400">
                   {i === 0 ? '🥇' : i === 1 ? '🥈' : i + 1}
                 </td>
                 <td class="px-3 py-3">
@@ -113,13 +104,13 @@ const jsonLd = {
   </div>
 
   <p class="mt-4 text-xs text-gray-400">
-    「—」表示该项暂无公开数据（待复测）。跑路 / 停运机场已沉底标注，请勿充值。
+    「—」表示该项暂无公开数据（待复测）。运营状态单独标注，不改变编辑推荐顺序；已停运或跑路的服务请勿充值。
   </p>
 
   <section class="mt-10 rounded-2xl bg-white p-6 text-sm leading-relaxed text-gray-600">
     <h2 class="mb-3 text-lg font-bold text-gray-900">怎么看这张对比表</h2>
     <p>
-      表格按综合推荐度与价格排序，置顶的是当前较受关注、数据较全的机场。横向对比时重点看三列：
+    表格按编辑推荐序列排列，价格、线路和支持情况单独呈现，不构成测试评分。横向对比时重点看三列：
       <strong>价格</strong>（预算）、<strong>线路</strong>（IEPL/IPLC 专线晚高峰更稳）、
       <strong>解锁</strong>（看 Netflix、用 ChatGPT 的刚需）。想按单一维度排名见
       <a href="/ranking/" class="text-blue-600 hover:underline">机场排名</a>，

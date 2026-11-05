@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AirportCard from '../../components/AirportCard.astro';
-import { BEST_PAGES } from '../../data/taxonomy';
+import { BEST_PAGES, sortByRecommendation } from '../../data/taxonomy';
 
 export async function getStaticPaths() {
   return BEST_PAGES.map((b) => ({ params: { case: b.slug }, props: { best: b } }));
@@ -12,25 +12,28 @@ const { best } = Astro.props;
 const all = await getCollection('airports');
 
 // 命中该用途的机场；数据未填用途的也列出（标注待复测），避免空榜。
-const matched = all.filter((a) => a.data.use_cases.includes(best.useCase as any));
+const matched = sortByRecommendation(all.filter((a) => a.data.use_cases.includes(best.useCase as any)));
 const matchedSet = new Set(matched.map((a) => a.id));
-const others = all.filter((a) => !matchedSet.has(a.id));
-
-matched.sort((a, b) => b.data.weight - a.data.weight);
-others.sort((a, b) => a.data.name.localeCompare(b.data.name, 'zh'));
+const others = sortByRecommendation(all.filter((a) => !matchedSet.has(a.id)));
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: best.title,
   numberOfItems: matched.length,
+  itemListElement: matched.map((a, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: a.data.name,
+    url: 'https://jichangdaquan.org/airports/' + a.id + '/',
+  })),
 };
 ---
 
-<Base title={best.title} description={`${best.title}。按证据等级与客观信息整理，数据待复测的已明确标注。`} jsonLd={jsonLd} path={`/best/${best.case ?? ''}/`}>
+<Base title={best.title} description={best.title + '。按站点编辑推荐顺序展示符合场景标签的机场；公开资料和待复测项目均有标注。'} jsonLd={jsonLd} path={'/best/' + best.slug + '/'}>
   <h1 class="mb-2 text-2xl font-bold">{best.title}</h1>
   <p class="mb-6 text-gray-500">
-    面向「{best.useCase}」场景的机场推荐。标注「待复测」的条目尚未独立核实，请以官网为准。
+    面向「{best.useCase}」场景的机场资料，按站点综合推荐顺序排列，不代表该场景的实时实测结果。标注「待复测」的条目尚未独立核实，请以官网为准。
   </p>
 
   {

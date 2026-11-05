@@ -101,28 +101,40 @@ export const EVIDENCE_LEVELS = ['实测', '公开信息整理', '待复测'] as 
 export type EvidenceLevel = (typeof EVIDENCE_LEVELS)[number];
 
 /**
- * 综合推荐排序（品牌横向对比用）。
- * 列在这里的机场按此顺序置顶，极连云第一、光年梯第二，其余顺延；
- * 未列出的机场排在后面（按价格升序）。
+ * 站点编辑推荐顺序。用于所有默认机场榜单与列表；
+ * 未列出的机场按名称顺延。该顺序不是实测评分。
  * slug 需与 src/content/airports/<slug>.md 一致。
  */
 export const RECOMMEND_ORDER = [
   'jilianyun', // 极连云 #1
   'guangnianti', // 光年梯 #2
-  'feimaoyun', // 飞猫云
-  'guangsuyun', // 光速云
-  'xingdaomeng', // 星岛梦
-  'quanqiuyun', // 全球云
+  'shunyun', // 瞬云
   'yuntu', // 云图
-  'lingmao', // 灵猫
   'kunpeng', // 鲲鹏加速
-  'lizione', // Lizione
+  'kexinyun', // 可信云
+  'dalaoyun', // 大佬云
+  'kuaili', // 快狸
+  'sujie', // 速界
+  'bianyuanjiedian', // 边缘节点
+  'liulianyun', // 榴莲云
+  'huanqiuti', // 环球梯
+  'yunjiexian', // 云界线
+  'shenxing', // 神行加速
+  'shandianshu', // 闪电鼠
 ] as const;
 
 /** 返回某 slug 的推荐序号（越小越靠前）；未列出的返回大数 */
 export function recommendRank(slug: string): number {
   const i = (RECOMMEND_ORDER as readonly string[]).indexOf(slug);
   return i === -1 ? 9999 : i;
+}
+
+/** Sort by the editorial priority list, then alphabetically for all remaining airports. */
+export function sortByRecommendation<T extends { id: string; data: { name: string } }>(items: T[]): T[] {
+  return [...items].sort((a, b) => {
+    const rankDiff = recommendRank(a.id) - recommendRank(b.id);
+    return rankDiff || a.data.name.localeCompare(b.data.name, 'zh');
+  });
 }
 
 /** 榜单落地页定义：best/[case] */

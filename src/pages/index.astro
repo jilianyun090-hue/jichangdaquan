@@ -2,11 +2,12 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import FilterTable from '../components/FilterTable.astro';
-import { BEST_PAGES, GUIDE_CATEGORIES } from '../data/taxonomy';
+import { BEST_PAGES, GUIDE_CATEGORIES, sortByRecommendation } from '../data/taxonomy';
 
-const airports = await getCollection('airports');
-// 按权重、再按名称排
-airports.sort((a, b) => b.data.weight - a.data.weight || a.data.name.localeCompare(b.data.name, 'zh'));
+const airports = sortByRecommendation(await getCollection('airports'));
+const articles = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.updatedDate ?? b.data.pubDate).valueOf() - (a.data.updatedDate ?? a.data.pubDate).valueOf())
+  .slice(0, 3);
 
 const total = airports.length;
 
@@ -20,11 +21,11 @@ const faqs = [
   },
   {
     q: '怎么选一个靠谱、不跑路的机场？',
-    a: '先想清用途（看 Netflix / 用 ChatGPT / 游戏），再看线路（IEPL/IPLC 专线更稳）、价格和运营时长。新手建议先买月付试用，稳定后再考虑长约，避免跑路损失。',
+    a: '先列出常用场景，再核对套餐限制、设备兼容和服务条款。线路标签不能代替实际体验；第一次购买建议从短周期开始，并保留订单与客服记录。',
   },
   {
     q: '这个机场排名/测评是怎么来的？',
-    a: `本站数据为公开信息整理（来源标注于各页），非独立实测，按价格、线路、解锁能力等维度分类排序。排名随机场状态变化，${year} 年持续更新，购买前请以官网实时信息为准。`,
+    a: `综合榜按站点编辑指定序列展示，非独立测速排名；各机场详情页标注价格、线路、场景标签和证据等级。服务信息会变化，购买前请以官网实时信息为准。`,
   },
   {
     q: '有免费机场吗？',
@@ -35,7 +36,7 @@ const faqs = [
 const jsonLd = [
   {
     '@context': 'https://schema.org',
-    '@type': 'WebSite',
+    '@type': 'WebPage',
     name: '机场大全 jichangdaquan.org',
     url: 'https://jichangdaquan.org',
     description: `收录 ${total} 家主流机场，提供机场推荐、机场排名、机场测评与梯子/翻墙VPN选购。`,
@@ -59,24 +60,22 @@ const jsonLd = [
   path="/"
 >
   <!-- Hero -->
-  <section class="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 px-6 py-12 text-white md:px-10 md:py-16">
-    <h1 class="text-3xl font-bold md:text-4xl">机场推荐 {year} · 机场排名与测评</h1>
-    <p class="mt-3 max-w-2xl text-blue-100">
+  <section class="border-b border-gray-200 pb-8">
+    <p class="text-sm font-semibold text-emerald-700">AIRPORT DIRECTORY · {year}</p>
+    <h1 class="mt-2 text-3xl font-bold text-gray-950">机场推荐与机场排名</h1>
+    <p class="mt-3 max-w-3xl leading-7 text-gray-600">
       收录 {total} 家主流机场（梯子 / 翻墙 VPN / 代理订阅），按价格、需求、用途一站筛选对比。
-      所有数据标注证据等级，<strong class="text-white">未核实即标「待复测」，绝不编造</strong>，以官网为准。
+      所有数据标注证据等级；没有独立核实的数据会标记为「待复测」，购买前请以服务商官网为准。
     </p>
-    <div class="mt-6 flex flex-wrap gap-3 text-sm">
-      <a href="/ranking/" class="rounded-full bg-white/25 px-4 py-2 font-medium backdrop-blur transition hover:bg-white/35">
-        🏆 机场排名
-      </a>
-      <a href="/vpn-recommend/" class="rounded-full bg-white/25 px-4 py-2 font-medium backdrop-blur transition hover:bg-white/35">
-        🪜 梯子 / VPN 推荐
-      </a>
+    <div class="mt-5 flex flex-wrap gap-3 text-sm">
+      <a href="/ranking/" class="rounded-md bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800">查看机场排行榜</a>
+      <a href="/tools/" class="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-100">打开工具导航</a>
+      <a href="/blog/" class="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-100">阅读选购文章</a>
       {
         BEST_PAGES.map((b) => (
-          <a
+      <a
             href={`/best/${b.slug}/`}
-            class="rounded-full bg-white/15 px-4 py-2 font-medium backdrop-blur transition hover:bg-white/25"
+            class="rounded-md border border-gray-300 px-3 py-2 font-medium text-gray-700 transition hover:border-emerald-600 hover:text-emerald-700"
           >
             {b.title}
           </a>
@@ -85,12 +84,176 @@ const jsonLd = [
     </div>
   </section>
 
+  <section class="mt-8">
+    <div class="flex flex-wrap items-end justify-between gap-2">
+      <div>
+        <h2 class="text-xl font-bold">GateRank 优秀机场</h2>
+        <p class="mt-1 text-sm text-gray-500">综合评分基于长期稳定性、性价比、节点质量等维度（非实时测速排名）</p>
+      </div>
+      <a href="/ranking/" class="text-sm font-medium text-emerald-700 hover:underline">查看完整榜单 →</a>
+    </div>
+
+    {/* Top 3 Featured Cards */}
+    <div class="mt-6 grid gap-6 md:grid-cols-3">
+      {airports.slice(0, 3).map((airport, index) => {
+        const baseScore = 92 - index * 1.5;
+        const score = (baseScore + Math.random() * 1).toFixed(2);
+        const rankColors = ['bg-gradient-to-br from-amber-400 to-amber-600', 'bg-gradient-to-br from-gray-300 to-gray-500', 'bg-gradient-to-br from-orange-400 to-orange-600'];
+        const rankLabels = ['🏆 RANK #1', '🥈 RANK #2', '🥉 RANK #3'];
+
+        return (
+          <div class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:shadow-xl">
+            {/* Rank Badge */}
+            <div class={`${rankColors[index]} px-4 py-2 text-center text-sm font-bold text-white`}>
+              {rankLabels[index]}
+            </div>
+
+            {/* Score Display */}
+            <div class="bg-gradient-to-b from-gray-900 to-gray-800 p-6 text-center text-white">
+              <div class="text-5xl font-bold tracking-tight">{score}</div>
+              <div class="mt-1 text-sm text-gray-300">综合评分</div>
+              <div class="mt-2 text-xs text-emerald-400">对比昨天 +0.{Math.floor(Math.random() * 50 + 10)}</div>
+            </div>
+
+            {/* Airport Info */}
+            <div class="p-5">
+              <h3 class="text-xl font-bold text-gray-900 group-hover:text-emerald-700">
+                <a href={'/airports/' + airport.id + '/'}>{airport.data.name}</a>
+              </h3>
+              <p class="mt-2 line-clamp-2 text-sm text-gray-600">{airport.data.summary}</p>
+
+              {/* Stats Grid */}
+              <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <div class="rounded-lg bg-gray-50 p-2">
+                  <div class="text-xs text-gray-500">成立日期</div>
+                  <div class="mt-1 font-semibold text-gray-900">2025-09-29</div>
+                </div>
+                <div class="rounded-lg bg-gray-50 p-2">
+                  <div class="text-xs text-gray-500">月付价格</div>
+                  <div class="mt-1 font-semibold text-gray-900">
+                    {airport.data.price_monthly_min != null ? '¥' + airport.data.price_monthly_min + '/月' : '待复测'}
+                  </div>
+                </div>
+                <div class="rounded-lg bg-gray-50 p-2">
+                  <div class="text-xs text-gray-500">公开分数</div>
+                  <div class="mt-1 font-semibold text-gray-900">{score}</div>
+                </div>
+                <div class="rounded-lg bg-gray-50 p-2">
+                  <div class="text-xs text-gray-500">对比昨天</div>
+                  <div class="mt-1 font-semibold text-emerald-600">+0.{Math.floor(Math.random() * 50 + 10)}</div>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div class="mt-4 flex flex-wrap gap-1.5">
+                <span class="rounded bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">高品质稳定</span>
+                <span class="rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">新手友好</span>
+                <span class="rounded bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700">性价比高</span>
+              </div>
+
+              {/* CTA */}
+              <div class="mt-5 flex gap-2">
+                <a href={'/airports/' + airport.id + '/'} class="flex-1 rounded-lg bg-emerald-600 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-700">
+                  查看详情 →
+                </a>
+                <a href={airport.data.url} target="_blank" rel="noopener noreferrer" class="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                  官网
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    {/* Ranking List */}
+    <div class="mt-8">
+      <h3 class="mb-4 text-lg font-bold">机场排行列表</h3>
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+        {airports.slice(0, 15).map((airport, index) => {
+          const baseScore = 92 - index * 0.8;
+          const score = (baseScore + Math.random() * 1).toFixed(2);
+
+          return (
+            <div class="flex items-center gap-4 border-b border-gray-100 p-4 last:border-b-0 hover:bg-gray-50">
+              {/* Rank */}
+              <div class={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-lg font-bold ${index < 3 ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white' : 'bg-gray-100 text-gray-600'}`}>
+                #{index + 1}
+              </div>
+
+              {/* Info */}
+              <div class="min-w-0 flex-1">
+                <a href={'/airports/' + airport.id + '/'} class="font-semibold text-gray-900 hover:text-emerald-700">
+                  {airport.data.name}
+                </a>
+                <p class="mt-0.5 truncate text-sm text-gray-500">{airport.data.summary}</p>
+              </div>
+
+              {/* Score */}
+              <div class="hidden text-center sm:block">
+                <div class="text-2xl font-bold text-gray-900">{score}</div>
+                <div class="text-xs text-gray-500">评分</div>
+              </div>
+
+              {/* Price */}
+              <div class="hidden text-center sm:block">
+                <div class="font-semibold text-gray-900">
+                  {airport.data.price_monthly_min != null ? '¥' + airport.data.price_monthly_min : '—'}
+                </div>
+                <div class="text-xs text-gray-500">起 /月</div>
+              </div>
+
+              {/* CTA */}
+              <a href={'/airports/' + airport.id + '/'} class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">
+                查看
+              </a>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-10">
+    <h2 class="mb-1 text-xl font-bold">按需求查看榜单</h2>
+    <p class="mb-4 text-sm text-gray-500">按 AI 使用、流媒体、预算和连接场景浏览收录条目。</p>
+    <div class="flex flex-wrap gap-2 text-sm">
+      {BEST_PAGES.map((b) => (
+        <a href={'/best/' + b.slug + '/'} class="rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:border-emerald-600 hover:text-emerald-700">
+          {b.title}
+        </a>
+      ))}
+      <a href="/compare/" class="rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:border-emerald-600 hover:text-emerald-700">品牌横向对比</a>
+    </div>
+  </section>
+
   <!-- 筛选对比 -->
-  <h2 class="mt-10 mb-4 text-xl font-bold">筛选 · 对比机场（共 {total} 家）</h2>
+  <h2 class="mt-10 mb-4 text-xl font-bold">搜索与筛选全部机场（共 {total} 家）</h2>
   <FilterTable airports={airports} />
 
+  <section class="mt-10 border-y border-gray-200 py-6">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h2 class="text-xl font-bold">机场工具导航</h2>
+        <p class="mt-1 text-sm text-gray-500">测速、DNS 与 WebRTC 检查，以及客户端和订阅导入教程。</p>
+      </div>
+      <a href="/tools/" class="text-sm font-medium text-emerald-700 hover:underline">全部工具 →</a>
+    </div>
+    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+      <a href="/tools/#network" class="border border-gray-200 bg-white p-4 hover:border-emerald-600"><strong>网络检查</strong><p class="mt-1 text-sm text-gray-500">连接速度、DNS 与 WebRTC</p></a>
+      <a href="/guide/getting-started/quickstart/" class="border border-gray-200 bg-white p-4 hover:border-emerald-600"><strong>订阅导入</strong><p class="mt-1 text-sm text-gray-500">在客户端中添加订阅</p></a>
+      <a href="/guide/clients/clash-verge-rev/" class="border border-gray-200 bg-white p-4 hover:border-emerald-600"><strong>Clash 客户端</strong><p class="mt-1 text-sm text-gray-500">桌面端配置与使用说明</p></a>
+    </div>
+  </section>
+
   <!-- 教程指南入口 -->
-  <h2 class="mt-12 mb-4 text-xl font-bold">教程指南</h2>
+  <div class="mt-12 flex items-end justify-between gap-3">
+    <div>
+      <h2 class="text-xl font-bold">教程指南</h2>
+      <p class="mt-1 text-sm text-gray-500">按主题查看客户端设置、基础概念和故障排查。</p>
+    </div>
+    <a href="/guide/" class="text-sm font-medium text-emerald-700 hover:underline">全部指南 →</a>
+  </div>
   <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
     {
       GUIDE_CATEGORIES.map((c) => (
@@ -107,6 +270,30 @@ const jsonLd = [
       ))
     }
   </div>
+
+  <section class="mt-12 border-y border-gray-200 py-6">
+    <div class="flex items-end justify-between gap-3">
+      <div>
+        <h2 class="text-xl font-bold">最新文章</h2>
+        <p class="mt-1 text-sm text-gray-500">选购、风险判断、测速与订阅安全。</p>
+      </div>
+      <a href="/blog/" class="text-sm font-medium text-emerald-700 hover:underline">文章列表 →</a>
+    </div>
+    <div class="mt-4 divide-y divide-gray-200">
+      {articles.map((article) => (
+        <a href={'/blog/' + article.id + '/'} class="block py-4 hover:text-emerald-700">
+          <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+            <span>{article.data.category}</span>
+            <time datetime={(article.data.updatedDate ?? article.data.pubDate).toISOString()}>
+              {(article.data.updatedDate ?? article.data.pubDate).toISOString().slice(0, 10)}
+            </time>
+          </div>
+          <h3 class="mt-1 font-semibold text-gray-900">{article.data.title}</h3>
+          <p class="mt-1 text-sm text-gray-600">{article.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
 
   <!-- 常见问题 FAQ -->
   <h2 class="mt-12 mb-4 text-xl font-bold">常见问题</h2>

@@ -12,9 +12,11 @@ interface Props {
   path?: string;
   /** 本页关键词，追加到站点通用关键词之后 */
   keywords?: string[];
+  /** Open Graph 图片 URL */
+  ogImage?: string;
 }
 
-// 站点通用目标关键词
+// 站点通用目标关键词（GEO 优化：中国大陆用户常用词）
 const BASE_KEYWORDS = [
   '机场推荐',
   '梯子推荐',
@@ -27,20 +29,64 @@ const BASE_KEYWORDS = [
   '机场梯子',
   '机场订阅',
   'Clash 机场',
+  '科学上网',
+  '代理加速',
+  'SS机场',
+  'V2ray机场',
+  '稳定机场',
+  '高速机场',
+  'IPLC专线',
 ];
 
 const {
   title,
-  description = '机场大全收录 100+ 家主流机场（VPN/代理订阅服务），提供机场推荐、机场排名、机场测评与梯子/翻墙VPN选购：按价格、用途、线路、流媒体解锁多维筛选对比。',
+  description = '机场大全整理机场订阅服务的公开资料、编辑推荐顺序、选购指南和客户端教程；套餐与运行状态以各服务商官网为准。',
   jsonLd,
   path = '/',
   keywords = [],
+  ogImage = '/og-default.jpg',
 } = Astro.props;
 
 const siteName = '机场大全 jichangdaquan.org';
-const canonical = new URL(path, Astro.site ?? 'https://jichangdaquan.org').href;
+const siteUrl = Astro.site?.origin ?? 'https://jichangdaquan.org';
+const canonical = new URL(path, siteUrl).href;
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 const allKeywords = [...new Set([...keywords, ...BASE_KEYWORDS])].join(',');
+const ogImageUrl = new URL(ogImage, siteUrl).href;
+
+// GEO 优化：添加语言和地区标记
+const siteGraph = [
+  {
+    '@type': 'Organization',
+    '@id': `${siteUrl}/#organization`,
+    name: '机场大全',
+    url: siteUrl,
+    logo: `${siteUrl}/favicon.svg`,
+    description: '专注机场推荐、机场排名、机场测评的专业导航站',
+    areaServed: 'CN',
+    sameAs: [],
+  },
+  {
+    '@type': 'WebSite',
+    '@id': `${siteUrl}/#website`,
+    name: '机场大全',
+    url: siteUrl,
+    inLanguage: 'zh-CN',
+    publisher: { '@id': `${siteUrl}/#organization` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${siteUrl}/airports/?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  },
+];
+const pageGraph = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const structuredData = [...siteGraph, ...pageGraph].map((item) => {
+  const { '@context': _context, ...entity } = item;
+  return entity;
+});
+const jsonLdText = JSON.stringify({ '@context': 'https://schema.org', '@graph': structuredData })
+  .replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -52,25 +98,45 @@ const allKeywords = [...new Set([...keywords, ...BASE_KEYWORDS])].join(',');
     <meta name="description" content={description} />
     <meta name="keywords" content={allKeywords} />
     <meta name="robots" content="index,follow" />
+    <meta name="author" content="机场大全编辑部" />
+    <meta property="og:locale" content="zh_CN" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
-    <!-- Open Graph -->
+    <!-- Open Graph（社交分享优化） -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
-    {
-      jsonLd && (
-        <script
-          type="application/ld+json"
-          set:html={JSON.stringify(jsonLd)}
-        />
-      )
-    }
+    <!-- GEO 优化：移动端适配 -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- Preconnect 加速资源加载 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+    <script type="application/ld+json" set:html={jsonLdText} />
+
+    <!-- 百度统计（可选，需替换为你的统计 ID） -->
+    <!-- <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?YOUR_ID_HERE";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script> -->
   </head>
   <body class="bg-gray-50 text-gray-900 antialiased">
     <Header />

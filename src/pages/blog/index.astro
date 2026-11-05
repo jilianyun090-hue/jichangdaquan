@@ -2,33 +2,65 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+const categories = ['选购指南', '避坑', '教程', '资讯'];
+const requestedCategory = Astro.url.searchParams.get('category');
+const selectedCategory = categories.includes(requestedCategory ?? '') ? requestedCategory : '';
+const posts = selectedCategory
+  ? allPosts.filter((post) => post.data.category === selectedCategory)
+  : allPosts;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '机场大全文章与选购指南',
+  numberOfItems: posts.length,
+  itemListElement: posts.map((post, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: post.data.title,
+    url: 'https://jichangdaquan.org/blog/' + post.id + '/',
+  })),
+};
 ---
 
 <Base
   title="博客 · 教程与选购指南"
-  description="机场选购指南、Clash/v2ray 使用教程、避坑与行情资讯。"
+  description="机场选购、风险识别、网络测速和 Clash/v2ray 客户端教程；文章标注更新时间、适用场景与资料核实边界。"
+  keywords={['机场选购指南', '机场测速教程', '机场订阅导入', '机场跑路避坑']}
+  jsonLd={jsonLd}
   path="/blog/"
 >
-  <h1 class="mb-6 text-2xl font-bold">博客</h1>
+  <header class="border-b border-gray-200 pb-6">
+    <p class="text-sm font-semibold text-emerald-700">GUIDES & NOTES</p>
+    <h1 class="mt-2 text-3xl font-bold text-gray-950">文章与使用指南</h1>
+    <p class="mt-2 max-w-3xl text-gray-600">选购、风险判断、网络测试与客户端设置。文章给出具体核对步骤，并说明哪些信息仍需自行确认。</p>
+  </header>
+  <nav aria-label="文章分类" class="flex flex-wrap gap-2 border-b border-gray-200 py-4 text-sm">
+    <a href="/blog/" aria-current={!selectedCategory ? 'page' : undefined} class={!selectedCategory ? 'rounded-md bg-emerald-700 px-3 py-2 text-white' : 'rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:border-emerald-600'}>全部文章</a>
+    {categories.map((category) => (
+      <a href={'/blog/?category=' + encodeURIComponent(category)} aria-current={selectedCategory === category ? 'page' : undefined} class={selectedCategory === category ? 'rounded-md bg-emerald-700 px-3 py-2 text-white' : 'rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 hover:border-emerald-600'}>
+        {category}
+      </a>
+    ))}
+  </nav>
   <div class="space-y-4">
     {
       posts.map((p) => (
         <a
           href={`/blog/${p.id}/`}
-          class="block rounded-xl border border-gray-200 bg-white p-5 transition hover:shadow-md"
+          class="block border-b border-gray-200 bg-white px-4 py-5 transition hover:bg-gray-50"
         >
           <div class="flex items-center gap-2 text-xs text-gray-400">
-            <span class="rounded bg-gray-100 px-2 py-0.5 text-gray-600">{p.data.category}</span>
-            <time>{p.data.pubDate.toISOString().slice(0, 10)}</time>
+            <span class="rounded bg-gray-100 px-2 py-0.5 text-gray-700">{p.data.category}</span>
+            <time datetime={p.data.pubDate.toISOString()}>{p.data.updatedDate ? '更新 ' + p.data.updatedDate.toISOString().slice(0, 10) : p.data.pubDate.toISOString().slice(0, 10)}</time>
           </div>
           <h2 class="mt-2 font-semibold text-gray-900">{p.data.title}</h2>
           <p class="mt-1 text-sm text-gray-500">{p.data.description}</p>
         </a>
       ))
     }
-    {posts.length === 0 && <p class="text-gray-400">暂无文章。</p>}
+    {posts.length === 0 && <p class="py-8 text-gray-500">这个分类暂时没有文章。</p>}
   </div>
 </Base>

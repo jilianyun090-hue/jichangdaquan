@@ -8,6 +8,7 @@ import {
   PAYMENTS,
   STATUS_STYLE,
   EVIDENCE_STYLE,
+  recommendRank,
 } from '../data/taxonomy';
 
 interface Props {
@@ -42,6 +43,7 @@ const rows = airports.map((a) => {
     priceMin: d.price_monthly_min ?? 99999, // 无价格的排到最后
     priceLabel,
     weight: d.weight,
+    order: recommendRank(a.id),
     affiliate: d.affiliate_url,
     officialOnly: d.official_only,
     statusStyle: STATUS_STYLE[d.status],
@@ -131,6 +133,7 @@ const rows = airports.map((a) => {
           data-price={r.priceMin}
           data-rating={r.rating ?? -1}
           data-weight={r.weight}
+          data-order={r.order}
         >
           <div class="flex items-start justify-between gap-2">
             <a href={`/airports/${r.id}/`} class="font-semibold text-gray-900 hover:text-blue-600">
@@ -264,7 +267,8 @@ const rows = airports.map((a) => {
         case 'name':
           return (a.dataset.name || '').localeCompare(b.dataset.name || '', 'zh');
         default:
-          return Number(b.dataset.weight) - Number(a.dataset.weight);
+          return Number(a.dataset.order) - Number(b.dataset.order) ||
+            (a.dataset.name || '').localeCompare(b.dataset.name || '', 'zh');
       }
     });
     sorted.forEach((r) => grid.appendChild(r));

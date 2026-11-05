@@ -2,15 +2,15 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AirportCard from '../../components/AirportCard.astro';
+import { sortByRecommendation } from '../../data/taxonomy';
 
 const year = new Date().getFullYear();
 const all = await getCollection('airports');
 
-// 推荐精选：正常运营 + 有价格 + 有解锁能力，价格升序取前 12
-const picks = all
-  .filter((a) => a.data.status === '正常' && a.data.price_monthly_min != null && a.data.streaming.length > 0)
-  .sort((a, b) => (a.data.price_monthly_min ?? 0) - (b.data.price_monthly_min ?? 0))
-  .slice(0, 12);
+// 推荐精选：正常运营且公开资料包含价格与解锁标签，沿用综合榜顺序。
+const picks = sortByRecommendation(
+  all.filter((a) => a.data.status === '正常' && a.data.price_monthly_min != null && a.data.streaming.length > 0),
+).slice(0, 12);
 
 const faqs = [
   {
@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: '梯子/VPN 推荐怎么选？',
-    a: '看三点：用途（看视频选流媒体解锁好的，用 ChatGPT 选 AI 友好的）、稳定性（IEPL/IPLC 专线晚高峰更稳）、价格（先月付试用）。下方按价格排序，可直接对比。',
+    a: '先按用途筛选，再核对套餐流量、设备限制、支持的客户端和退款条款。线路名称不能代替实际测试；下方按站点编辑推荐序列展示，建议先月付试用。',
   },
   {
     q: '有免费梯子 / 免费 VPN 吗？',
@@ -48,18 +48,17 @@ const jsonLd = [
 
 <Base
   title={`梯子推荐 / 翻墙VPN推荐 ${year} · 机场节点选购`}
-  description={`${year} 梯子推荐与翻墙 VPN 推荐：精选稳定、便宜、支持 Netflix/ChatGPT 的机场节点，按价格对比，含选购指南与常见问题。数据为公开信息整理，以官网为准。`}
+  description={`${year} 梯子与机场订阅服务资料：按站点编辑推荐序列展示公开套餐、流媒体和 AI 标签，并提供选购指南与常见问题。详情以官网为准。`}
   keywords={['梯子推荐', '翻墙VPN', 'VPN推荐', '梯子工具', '机场梯子', '好用的梯子', '梯子VPN', '科学上网']}
   jsonLd={jsonLd}
   path="/vpn-recommend/"
 >
   <h1 class="text-2xl font-bold">梯子推荐 / 翻墙 VPN 推荐（{year}）</h1>
   <p class="mt-2 max-w-3xl text-gray-500">
-    精选稳定、便宜、解锁能力好的机场节点（梯子 / 翻墙 VPN）。下方按最低月付价排序，支持 Netflix、
-    ChatGPT 等场景。数据为公开信息整理，非独立实测，<strong>以官网为准，建议先月付试用</strong>。
+    下方按站点编辑推荐序列排序，不代表独立实测评分。价格、套餐与服务状态会变化；公开资料和待复测项目会明确标注，<strong>以官网为准，建议先月付试用</strong>。
   </p>
 
-  <h2 class="mt-8 mb-4 text-xl font-bold">精选推荐（按价格）</h2>
+  <h2 class="mt-8 mb-4 text-xl font-bold">编辑推荐（按综合榜顺序）</h2>
   <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
     {picks.map((a) => <AirportCard airport={a} />)}
   </div>

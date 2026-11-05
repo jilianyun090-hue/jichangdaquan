@@ -1,27 +1,23 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { STATUS_STYLE, EVIDENCE_STYLE } from '../../data/taxonomy';
+import { STATUS_STYLE, sortByRecommendation } from '../../data/taxonomy';
 
 const year = new Date().getFullYear();
 const month = new Date().getMonth() + 1;
 
-const all = await getCollection('airports');
+const all = sortByRecommendation(await getCollection('airports'));
 
-// 有价格的进排名，按价格升序（便宜优先）；无价格的不参与主榜
-const priced = all.filter((a) => a.data.price_monthly_min != null);
-priced.sort((a, b) => (a.data.price_monthly_min ?? 0) - (b.data.price_monthly_min ?? 0));
+// 综合榜使用站点编辑指定顺序，包含价格尚未核实的条目。
+const ranked = all.slice(0, 15);
 
-// 分榜：性价比（价格最低）、流媒体、AI/ChatGPT、运营状态风险
-const cheapest = [...priced].slice(0, 15);
-const streaming = all
+// 场景榜只保留有对应公开标签的条目，展示顺序与综合榜一致。
+const streaming = sortByRecommendation(all
   .filter((a) => a.data.streaming.length >= 3 && a.data.status === '正常')
-  .sort((a, b) => b.data.streaming.length - a.data.streaming.length)
-  .slice(0, 12);
-const ai = all
+  .slice(0, 12));
+const ai = sortByRecommendation(all
   .filter((a) => a.data.use_cases.includes('AI/ChatGPT') && a.data.status === '正常')
-  .sort((a, b) => (a.data.price_monthly_min ?? 999) - (b.data.price_monthly_min ?? 999))
-  .slice(0, 12);
+  .slice(0, 12));
 const risky = all.filter((a) => a.data.status === '跑路' || a.data.status === '异常' || a.data.status === '停运');
 
 const priceLabel = (a: (typeof all)[number]) =>
@@ -31,8 +27,8 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: `${year} 机场排名`,
-  numberOfItems: priced.length,
-  itemListElement: cheapest.map((a, i) => ({
+  numberOfItems: all.length,
+  itemListElement: all.map((a, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     name: a.data.name,
@@ -43,27 +39,27 @@ const jsonLd = {
 
 <Base
   title={`机场排名 ${year} · 机场排行榜与测评`}
-  description={`${year} 年 ${month} 月机场排名与机场排行榜：收录 ${all.length} 家机场，按性价比、流媒体解锁、ChatGPT/AI、运营风险多维排序。数据为公开信息整理，以官网为准。`}
+  description={`${year} 年机场综合推荐榜，收录 ${all.length} 家机场；推荐顺序为编辑排序，另提供 AI、流媒体和风险信息。数据状态逐项标注，以官网为准。`}
   keywords={['机场排名', '机场排行榜', '机场测评', '机场推荐榜单', '机场月度报告']}
   jsonLd={jsonLd}
   path="/ranking/"
 >
   <h1 class="text-2xl font-bold">机场排名 · 机场排行榜（{year} 年 {month} 月）</h1>
   <p class="mt-2 max-w-3xl text-gray-500">
-    收录 {all.length} 家机场，按价格、流媒体解锁、AI/ChatGPT 支持与运营风险多维排名。
-    排名基于各参考站公开信息整理，非独立实测，机场状态变动快，<strong>购买前请以官网为准</strong>。
+    收录 {all.length} 家机场。综合榜顺序按站点编辑指定序列排列：极连云第一、光年梯第二，其后为瞬云、云图、鲲鹏加速、可信云、大佬云、快狸、速界、边缘节点、榴莲云、环球梯、云界线、神行加速、闪电鼠，其他条目按名称顺延。
+    这是编辑排序，不是独立测速或客观评分；状态、价格和线路请查看各机场详情并以官网为准。
   </p>
 
   <!-- 性价比榜 -->
   <section class="mt-8">
-    <h2 class="mb-3 text-xl font-bold">💰 性价比榜（最低月付 TOP15）</h2>
+    <h2 class="mb-3 text-xl font-bold">综合推荐榜 TOP 15</h2>
     <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">
       <table class="w-full text-sm">
         <thead class="border-b border-gray-200 bg-gray-50 text-left text-gray-500">
           <tr>
             <th class="px-4 py-3">#</th>
             <th class="px-4 py-3">机场</th>
-            <th class="px-4 py-3">最低月付</th>
+            <th class="px-4 py-3">月付参考</th>
             <th class="px-4 py-3">线路</th>
             <th class="px-4 py-3">状态</th>
             <th class="px-4 py-3"></th>
@@ -71,7 +67,7 @@ const jsonLd = {
         </thead>
         <tbody>
           {
-            cheapest.map((a, i) => (
+            ranked.map((a, i) => (
               <tr class="border-b border-gray-100 last:border-0">
                 <td class="px-4 py-3 font-medium text-gray-400">{i + 1}</td>
                 <td class="px-4 py-3">
@@ -162,12 +158,11 @@ const jsonLd = {
     )
   }
 
-  <section class="mt-10 rounded-2xl bg-white p-6 text-sm leading-relaxed text-gray-600">
+  <section class="mt-10 border-y border-gray-200 py-6 text-sm leading-relaxed text-gray-600">
     <h2 class="mb-3 text-lg font-bold text-gray-900">机场排名说明</h2>
     <p>
-      本机场排行榜综合价格、线路类型、流媒体与 ChatGPT 解锁能力、运营状态等维度，参考 GateRank、机场PK
-      等公开榜单整理而成。机场（梯子 / 翻墙 VPN）行业变动极快，排名不代表长期保证，标注「待复测」的机场
-      尚未独立核实。建议先看<a href="/guide/getting-started/choose-plan/" class="text-blue-600 hover:underline">选购指南</a>，
+      综合推荐榜采用站点编辑指定的展示顺序，不根据价格、推广链接或未经证实的测速数据计算分数。AI 与流媒体分榜只筛选公开资料中标注相应场景的机场，并保留相同的编辑顺序；这不等于实时解锁测试。
+      机场服务变化快，标注「待复测」的项目尚未独立核实。建议先看<a href="/guide/getting-started/choose-plan/" class="text-blue-600 hover:underline">选购指南</a>，
       月付试用稳定后再决定。完整列表见<a href="/airports/" class="text-blue-600 hover:underline">机场列表</a>。
     </p>
   </section>
