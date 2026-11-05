@@ -2,7 +2,7 @@
 title: "流媒体解锁机场选购指南：Netflix、Disney+、YouTube Premium 完全攻略"
 description: "针对 Netflix、Disney+、YouTube Premium、HBO Max 等流媒体的机场选择技巧，包含解锁原理、区域选择、画质优化、常见问题排查。"
 pubDate: 2026-01-27
-category: "专题推荐"
+category: "选购指南"
 tags: ["流媒体", "Netflix", "解锁", "机场推荐"]
 ---
 

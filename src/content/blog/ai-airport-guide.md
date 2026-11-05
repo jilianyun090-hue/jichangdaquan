@@ -2,7 +2,7 @@
 title: "AI 工具专用机场选购指南：ChatGPT、Claude、Gemini 访问优化"
 description: "针对 ChatGPT、Claude、Gemini 等 AI 工具的机场选择技巧，包含 IP 要求、区域限制、稳定性测试方法，帮你找到最适合 AI 应用的节点。"
 pubDate: 2026-01-26
-category: "专题推荐"
+category: "选购指南"
 tags: ["AI工具", "ChatGPT", "机场推荐"]
 ---
 
