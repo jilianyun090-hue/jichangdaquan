@@ -156,7 +156,7 @@ const jsonLd = [
                 <a href={'/airports/' + airport.id + '/'} class="flex-1 rounded-lg bg-emerald-600 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-emerald-700">
                   查看详情 →
                 </a>
-                <a href={airport.data.url} target="_blank" rel="noopener noreferrer" class="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <a href={airport.data.affiliate_url || '#'} target="_blank" rel="noopener noreferrer" class="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
                   官网
                 </a>
               </div>
