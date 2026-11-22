@@ -16,8 +16,8 @@ const year = new Date().getFullYear();
 // FAQ 常见问题（命中长尾词 + FAQPage 结构化数据）
 const faqs = [
   {
-    q: '机场和 VPN、梯子有什么区别？',
-    a: '「机场」是提供代理节点订阅的服务，用 Clash 等客户端连接；「梯子」「翻墙 VPN」是同类说法。机场通常节点更多、价格更灵活、流媒体解锁更好，适合多数用户。',
+    q: '机场和 VPN、梯子、魔法梯子有什么区别？',
+    a: '「机场」是提供代理节点订阅的服务，用 Clash 等客户端连接；「梯子」「魔法梯子」「翻墙 VPN」是同类说法，都用来科学上网。机场通常节点更多、价格更灵活、流媒体解锁更好，适合多数用户。',
   },
   {
     q: '怎么选一个靠谱、不跑路的机场？',
@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: '有免费机场吗？',
-    a: '不建议长期使用免费机场：通常不稳定、限速、有隐私风险，且随时可能跑路。本站收录的多为低价付费机场，最低每月几元，性价比和稳定性更可靠。',
+    a: '不建议长期使用免费机场：通常不稳定、限速、有隐私风险，且随时可能跑路。本站收录的多为低价付费机场、便宜机场和性价比机场，最低每月几元，稳定性更可靠。',
   },
 ];
 
@@ -54,8 +54,9 @@ const jsonLd = [
 ---
 
 <Base
-  title={`机场推荐 ${year} · 机场排名测评 | 梯子/翻墙VPN选购`}
-  description={`机场大全收录 ${total} 家主流机场：提供 ${year} 机场推荐、机场排名、机场测评，以及梯子、翻墙VPN、Clash 机场节点选购。按价格、用途（ChatGPT/流媒体/游戏）、线路、支付方式一站筛选对比。`}
+  title={`机场推荐 ${year} · 机场排行榜 | 梯子/魔法梯子/科学上网VPN选购`}
+  description={`机场大全收录 ${total} 家主流机场：提供 ${year} 机场推荐、机场排名、机场测评，以及梯子、魔法梯子、科学上网、翻墙VPN、Clash 机场节点选购。按价格、用途（ChatGPT/流媒体/游戏）、线路、支付方式一站筛选对比。`}
+  keywords={['机场推荐', '机场排行', '梯子推荐', 'VPN推荐', '魔法梯子', '科学上网', '便宜机场', '性价比机场', '专线机场']}
   jsonLd={jsonLd}
   path="/"
 >
@@ -308,15 +309,14 @@ const jsonLd = [
     }
   </div>
 
-  <!-- SEO 文案段落 -->
   <section class="mt-12 rounded-2xl bg-white p-6 text-sm leading-relaxed text-gray-600">
     <h2 class="mb-3 text-lg font-bold text-gray-900">关于机场大全</h2>
     <p>
-      机场大全（jichangdaquan.org）是一个机场推荐与机场排名导航站，收录市面主流的机场、梯子、翻墙 VPN 与代理订阅服务，
-      提供机场测评、价格对比、线路与流媒体解锁信息。无论你是想找便宜机场、稳定的 IEPL/IPLC 专线机场，
+      机场大全（jichangdaquan.org）是一个机场推荐与机场排行导航站，收录市面主流的机场、梯子、魔法梯子、科学上网VPN与代理订阅服务，
+      提供机场测评、价格对比、线路与流媒体解锁信息。无论你是想找便宜机场、性价比机场、稳定的 IEPL/IPLC 专线机场，
       还是支持 ChatGPT、Netflix 解锁的机场节点，都可以在<a href="/airports/" class="text-blue-600 hover:underline">机场列表</a>
       按价格和需求筛选，或查看<a href="/ranking/" class="text-blue-600 hover:underline">机场排名</a>与
-      <a href="/vpn-recommend/" class="text-blue-600 hover:underline">梯子/VPN 推荐</a>。
+      <a href="/vpn-recommend/" class="text-blue-600 hover:underline">梯子/魔法梯子/VPN 推荐</a>。
       新手可先看<a href="/guide/" class="text-blue-600 hover:underline">教程指南</a>了解 Clash 等客户端怎么用。
     </p>
     <p class="mt-3 text-gray-400">

@@ -14,15 +14,15 @@ const picks = sortByRecommendation(
 
 const faqs = [
   {
-    q: '梯子、翻墙 VPN、机场是一回事吗？',
-    a: '日常语境下「梯子」「翻墙 VPN」多指同一件事：帮你访问境外网站的工具。本站推荐的是「机场」——基于 Clash 等客户端的订阅式代理服务，比传统 VPN 节点多、更灵活、流媒体解锁更好。',
+    q: '梯子、魔法梯子、翻墙 VPN、机场是一回事吗？',
+    a: '日常语境下「梯子」「魔法梯子」「翻墙 VPN」多指同一件事：帮你科学上网访问境外网站的工具。本站推荐的是「机场」——基于 Clash 等客户端的订阅式代理服务，比传统 VPN 节点多、更灵活、流媒体解锁更好。',
   },
   {
     q: '梯子/VPN 推荐怎么选？',
     a: '先按用途筛选，再核对套餐流量、设备限制、支持的客户端和退款条款。线路名称不能代替实际测试；下方按站点编辑推荐序列展示，建议先月付试用。',
   },
   {
-    q: '有免费梯子 / 免费 VPN 吗？',
+    q: '有免费梯子 / 免费魔法梯子 / 免费 VPN 吗？',
     a: '不推荐。免费梯子通常限速、不稳定、有隐私和安全风险，还容易跑路。本站收录的低价机场最低每月几元，稳定性和解锁能力远胜免费工具。',
   },
 ];
@@ -47,13 +47,13 @@ const jsonLd = [
 ---
 
 <Base
-  title={`梯子推荐 / 翻墙VPN推荐 ${year} · 机场节点选购`}
-  description={`${year} 梯子与机场订阅服务资料：按站点编辑推荐序列展示公开套餐、流媒体和 AI 标签，并提供选购指南与常见问题。详情以官网为准。`}
-  keywords={['梯子推荐', '翻墙VPN', 'VPN推荐', '梯子工具', '机场梯子', '好用的梯子', '梯子VPN', '科学上网']}
+  title={`梯子推荐 / 魔法梯子 / 科学上网VPN推荐 ${year}`}
+  description={`${year} 梯子、魔法梯子与科学上网机场推荐：按站点编辑推荐序列展示公开套餐、流媒体和 AI 标签，并提供选购指南与常见问题。详情以官网为准。`}
+  keywords={['梯子推荐', '魔法梯子', '翻墙VPN', 'VPN推荐', '科学上网', '梯子工具', '机场梯子', '好用的梯子', '梯子VPN']}
   jsonLd={jsonLd}
   path="/vpn-recommend/"
 >
-  <h1 class="text-2xl font-bold">梯子推荐 / 翻墙 VPN 推荐（{year}）</h1>
+  <h1 class="text-2xl font-bold">梯子推荐 / 魔法梯子 / 科学上网VPN（{year}）</h1>
   <p class="mt-2 max-w-3xl text-gray-500">
     下方按站点编辑推荐序列排序，不代表独立实测评分。价格、套餐与服务状态会变化；公开资料和待复测项目会明确标注，<strong>以官网为准，建议先月付试用</strong>。
   </p>
@@ -81,9 +81,9 @@ const jsonLd = [
   </div>
 
   <section class="mt-12 rounded-2xl bg-white p-6 text-sm leading-relaxed text-gray-600">
-    <h2 class="mb-3 text-lg font-bold text-gray-900">关于梯子 / 翻墙 VPN 推荐</h2>
+    <h2 class="mb-3 text-lg font-bold text-gray-900">关于梯子 / 魔法梯子 / 科学上网VPN推荐</h2>
     <p>
-      本页汇总适合科学上网的梯子与翻墙 VPN（机场）推荐。相比传统 VPN 软件，机场用 Clash、Shadowrocket
+      本页汇总适合科学上网的梯子、魔法梯子与翻墙 VPN（机场）推荐。相比传统 VPN 软件，机场用 Clash、Shadowrocket
       等客户端连接，节点更多、价格更灵活、对 Netflix、Disney+、ChatGPT 等的解锁更好。
       不确定怎么用的，先看<a href="/guide/getting-started/quickstart/" class="text-blue-600 hover:underline">零基础订阅教程</a>
       和<a href="/guide/clients/clash-verge-rev/" class="text-blue-600 hover:underline">Clash 使用教程</a>。

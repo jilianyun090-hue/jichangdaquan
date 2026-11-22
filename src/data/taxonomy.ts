@@ -142,6 +142,8 @@ export const BEST_PAGES = [
   { slug: 'chatgpt', title: 'ChatGPT / AI 机场推荐', useCase: 'AI/ChatGPT' },
   { slug: 'netflix', title: 'Netflix 流媒体解锁机场推荐', useCase: '流媒体' },
   { slug: 'cheap', title: '便宜机场推荐（低价备用）', useCase: '低价备用' },
+  { slug: 'value', title: '性价比机场推荐（高性价比梯子）', useCase: '日常主力' },
+  { slug: 'iplc', title: '专线机场推荐（IPLC/IEPL）', useCase: '外贸办公' },
   { slug: 'game', title: '游戏加速机场推荐', useCase: '游戏加速' },
   { slug: 'office', title: '外贸办公稳定机场推荐', useCase: '外贸办公' },
 ] as const;
